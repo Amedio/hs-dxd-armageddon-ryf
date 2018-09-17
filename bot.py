@@ -105,4 +105,11 @@ async def effect(ctx, arg1, arg2=0):
 
     await ctx.send(embed=rich)
 
+@bot.command()
+async def say(ctx, arg1, arg2):
+    pc = arg1
+    text = arg2
+
+    await ctx.send(":{0}: **text**".format(pc, text))
+
 bot.run(bot_token)

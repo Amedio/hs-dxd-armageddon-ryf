@@ -110,6 +110,12 @@ async def say(ctx, arg1, arg2):
     pc = arg1
     text = arg2
 
-    await ctx.send(":scream: :{0}: **{1}**".format(pc, text))
+    rich=Embed(title=text, color=0xffffff)
+
+    if pc == "ure":
+        rich.set_author(name="Muto Urena")
+        rich.set_thumbnail(url="https://www.comunidadumbria.com/imgs/rpw/pjs/5ab3e25ac1070.png")
+
+    await ctx.send(embed=rich)
 
 bot.run(bot_token)

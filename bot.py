@@ -108,17 +108,26 @@ async def effect(ctx, arg1, arg2=0):
     await ctx.send(embed=rich)
 
 @bot.command()
-async def char(ctx, arg1, arg2, arg3):
-    database.insert_char(arg1, arg2, arg3)
+async def char(ctx, shortcut, name, thumbnail):
+    database.insert_char(shortcut, name, thumbnail, ctx.author.name)
 
 @bot.command()
-async def say(ctx, arg1, arg2):
-    pc = arg1
-    text = arg2
+async def say(ctx, *args):
+    shortcut = ''
+    text = ''
+
+    if len(args) == 2:
+        shortcut = args[0]
+        text = args[1]
+    elif len(args) == 1:
+        text = args[0]
 
     rich=Embed(title=text, color=0xffffff)
 
-    row = database.select_char(pc)
+    if shortcut != '':
+        row = database.select_char_shortcut(shortcut)
+    else:
+        row = databas.select_char_player(ctx.user.name)
 
     rich.set_author(name=row[2])
     rich.set_thumbnail(url=row[3])

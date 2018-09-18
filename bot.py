@@ -108,7 +108,7 @@ async def effect(ctx, arg1, arg2=0):
     await ctx.send(embed=rich)
 
 @bot.command()
-async def reg_char(ctx, arg1, arg2, arg3):
+async def char(ctx, arg1, arg2, arg3):
     conn = psycopg2.connect(database_url, sslmode='require')
     cur = conn.cursor()
 

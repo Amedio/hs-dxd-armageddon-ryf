@@ -127,7 +127,7 @@ async def say(ctx, *args):
     if shortcut != '':
         row = database.select_char_shortcut(shortcut)
     else:
-        row = database.select_char_player(ctx.user.name)
+        row = database.select_char_player(ctx.author.name)
 
     rich.set_author(name=row[2])
     rich.set_thumbnail(url=row[3])

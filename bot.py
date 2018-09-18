@@ -83,9 +83,7 @@ async def roll(ctx, *args):
     await ctx.send(embed=rich)
 
 @bot.command(description='Escribe d!effect numero_dados [bonus]')
-async def effect(ctx, arg1, arg2=0):
-    bonus = arg2
-    dice_amount = int(arg1)
+async def effect(ctx, dice_amount:int, bonus:int=0):
     if dice_amount >= 100:
         async with ctx.typing():
             await asyncio.sleep(3)
@@ -108,7 +106,7 @@ async def effect(ctx, arg1, arg2=0):
     await ctx.send(embed=rich)
 
 @bot.command()
-async def char(ctx, shortcut, name, thumbnail):
+async def char(ctx, shortcut:str, name:str, thumbnail:str):
     database.insert_char(shortcut, name, thumbnail, ctx.author.name)
 
 @bot.command()

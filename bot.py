@@ -6,11 +6,11 @@ import asyncio
 import configparser
 import os
 import psycopg2
+import database
 from discord.ext import commands
 from discord import Embed
 
 bot_token = os.environ['BOT_TOKEN']
-database_url = os.environ['DATABASE_URL']
 
 bot = commands.Bot(command_prefix='d!')
 
@@ -109,14 +109,7 @@ async def effect(ctx, arg1, arg2=0):
 
 @bot.command()
 async def char(ctx, arg1, arg2, arg3):
-    conn = psycopg2.connect(database_url, sslmode='require')
-    cur = conn.cursor()
-
-    cur.execute("INSERT INTO character (shortcut, name, thumbnail) VALUES ('{0}', '{1}', '{2}')".format(arg1, arg2, arg3))
-
-    conn.commit()
-    cur.close()
-    conn.close()
+    database.insert_char(arg1, arg2, arg3)
 
 @bot.command()
 async def say(ctx, arg1, arg2):
@@ -125,18 +118,10 @@ async def say(ctx, arg1, arg2):
 
     rich=Embed(title=text, color=0xffffff)
 
-    conn = psycopg2.connect(database_url, sslmode='require')
-    cur = conn.cursor()
-
-    cur.execute("SELECT * FROM character WHERE shortcut = '{0}'".format(pc))
-
-    row = cur.fetchone()
+    row = database.select_char(pc)
 
     rich.set_author(name=row[2])
     rich.set_thumbnail(url=row[3])
-
-    cur.close()
-    conn.close()
 
     await ctx.send(embed=rich)
 

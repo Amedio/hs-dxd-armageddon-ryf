@@ -112,7 +112,7 @@ async def reg_char(ctx, arg1, arg2, arg3):
     conn = psycopg2.connect(database_url, sslmode='require')
     cur = conn.cursor()
 
-    cur.execute("INSERT INTO character (shortcut, name, thumbnail) VALUES ({0}, {1}, {2})".format(arg1, arg2, arg3))
+    cur.execute("INSERT INTO character (shortcut, name, thumbnail) VALUES ('{0}', '{1}', '{2}')".format(arg1, arg2, arg3))
 
     conn.commit()
     cur.close()

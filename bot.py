@@ -5,10 +5,12 @@ import ryf
 import asyncio
 import configparser
 import os
+import psycopg2
 from discord.ext import commands
 from discord import Embed
 
 bot_token = os.environ['BOT_TOKEN']
+database_url = os.environ['DATABASE_URL']
 
 bot = commands.Bot(command_prefix='d!')
 
@@ -104,6 +106,17 @@ async def effect(ctx, arg1, arg2=0):
         rich.add_field(name="total", value="{0} + {1} = {2}".format(total_roll, bonus, total), inline=False)
 
     await ctx.send(embed=rich)
+
+@bot.command()
+async def reg_char(ctx, arg1, arg2, arg3):
+    conn = psycopg2.connect(database_url, sslmode='require')
+    cur = conn.cursor()
+
+    cur.execute("INSERT INTO character (shortcut, name, thumbnail) VALUES ({0}, {1}, {2})".format(arg1, arg2, arg3))
+
+    conn.commit()
+    cur.close()
+    conn.close()
 
 @bot.command()
 async def say(ctx, arg1, arg2):

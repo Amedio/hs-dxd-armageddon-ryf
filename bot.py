@@ -125,9 +125,18 @@ async def say(ctx, arg1, arg2):
 
     rich=Embed(title=text, color=0xffffff)
 
-    if pc == "ure":
-        rich.set_author(name="Muto Urena")
-        rich.set_thumbnail(url="https://www.comunidadumbria.com/imgs/rpw/pjs/5ab3e25ac1070.png")
+    conn = psycopg2.connect(database_url, sslmode='require')
+    cur = conn.cursor()
+
+    cur.execute("SELECT * FROM character WHERE shortcut = '{0}'".format(pc))
+
+    row = cur.fetchone()
+
+    rich.set_author(name=row[2])
+    rich.set_thumbnail(url=row[3])
+
+    cur.close()
+    conn.close()
 
     await ctx.send(embed=rich)
 

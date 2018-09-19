@@ -21,7 +21,7 @@ async def on_ready():
     print(bot.user.id)
     print('------')
 
-@bot.command(description='Escribe d!roll [down|d|up|u] [nivel_habilidad [dificultad]]')
+@bot.command()
 async def roll(ctx, bonus:int=0, difficulty:int=0, dice:str='n'):
     dice_index = 1
     if dice == 'down' or dice == 'd':
@@ -66,7 +66,7 @@ async def roll(ctx, bonus:int=0, difficulty:int=0, dice:str='n'):
 
     await ctx.send(embed=rich)
 
-@bot.command(description='Escribe d!effect numero_dados [bonus]')
+@bot.command()
 async def effect(ctx, dice_amount:int, bonus:int=0):
     if dice_amount >= 100:
         async with ctx.typing():

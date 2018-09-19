@@ -22,11 +22,7 @@ async def on_ready():
     print('------')
 
 @bot.command(description='Escribe d!roll [down|d|up|u] [nivel_habilidad [dificultad]]')
-async def roll(ctx, dice:str='n', bonus:int=0, difficulty:int=0):
-    bonus = 0
-    difficulty = 0
-    dice_index = 1
-
+async def roll(ctx, bonus:int=0, difficulty:int=0, dice:str='n'):
     dice_index = 1
     if dice == 'down' or dice == 'd':
         dice_index = 0

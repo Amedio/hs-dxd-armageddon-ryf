@@ -91,7 +91,10 @@ async def effect(ctx, dice_amount:int, bonus:int=0):
 
 @bot.command()
 async def char(ctx, shortcut:str, name:str, thumbnail:str):
-    database.insert_char(shortcut, name, thumbnail, ctx.author.name)
+    if database.exists_char(shortcut):
+        database.update_char(shortcut, name, thumbnail)
+    else:
+        database.insert_char(shortcut, name, thumbnail, ctx.author.name)
 
 @bot.command()
 async def say(ctx, text:str, shortcut:str=''):

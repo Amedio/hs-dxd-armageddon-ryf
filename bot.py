@@ -94,16 +94,7 @@ async def char(ctx, shortcut:str, name:str, thumbnail:str):
     database.insert_char(shortcut, name, thumbnail, ctx.author.name)
 
 @bot.command()
-async def say(ctx, *args):
-    shortcut = ''
-    text = ''
-
-    if len(args) == 2:
-        shortcut = args[0]
-        text = args[1]
-    elif len(args) == 1:
-        text = args[0]
-
+async def say(ctx, text:str, shortcut:str=''):
     rich=Embed(title=text, color=0xffffff)
 
     if shortcut != '':

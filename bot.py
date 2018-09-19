@@ -22,28 +22,16 @@ async def on_ready():
     print('------')
 
 @bot.command(description='Escribe d!roll [down|d|up|u] [nivel_habilidad [dificultad]]')
-async def roll(ctx, *args):
+async def roll(ctx, dice:str='n', bonus:int=0, difficulty:int=0):
     bonus = 0
     difficulty = 0
     dice_index = 1
 
-    if len(args) == 1 and utils.is_int(args[0]):
-        bonus = int(args[0])
-    elif len(args) == 2 and utils.is_int(args[0]) and utils.is_int(args[1]):
-        bonus = int(args[0])
-        difficulty = int(args[1])
-    elif len(args) == 3 and utils.is_int(args[1]) and utils.is_int(args[2]):
-        bonus = int(args[1])
-        difficulty = int(args[2])
-    elif len(args) == 2 and utils.is_int(args[1]):
-        bonus = int(args[1])
-
     dice_index = 1
-    if len(args) > 0 and not utils.is_int(args[0]):
-        if args[0] == 'down' or args[0] == 'd':
-            dice_index = 0
-        elif args[0] == 'up' or args[0] == 'u':
-            dice_index = 2
+    if dice == 'down' or dice == 'd':
+        dice_index = 0
+    elif dice == 'up' or dice == 'u':
+        dice_index = 2
     
     roll_result = ryf.attr_skill_roll(dice_index)
 

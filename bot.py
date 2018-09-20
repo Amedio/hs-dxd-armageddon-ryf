@@ -130,6 +130,7 @@ async def combat(ctx, enemy:discord.Member):
         await ctx.send("Si quieres combatir ve a #arena-de-batalla")
         return
 
-    await ctx.send('{0} desafía a {1} a un combate'.format(ctx.author.display_name, enemy.display_name))
+    msg = await ctx.send('{0} desafía a {1} a un combate'.format(ctx.author.display_name, enemy.display_name))
+    await msg.pin()
 
 bot.run(bot_token)

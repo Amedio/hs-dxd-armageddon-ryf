@@ -100,7 +100,7 @@ async def char(ctx, shortcut:str, name:str, thumbnail:str):
         if is_master or not database.player_has_char(ctx.author.name):
             database.insert_char(shortcut, name, thumbnail, ctx.author.name)
         else:
-            ctx.send('No eres el masta y ya tienes un personaje')
+            await ctx.send('No eres el masta y ya tienes un personaje')
 
 @bot.command()
 async def say(ctx, text:str, shortcut:str=''):

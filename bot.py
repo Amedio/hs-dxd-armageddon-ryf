@@ -102,6 +102,10 @@ async def char(ctx, shortcut:str, name:str, thumbnail:str):
 
 @bot.command()
 async def say(ctx, text:str, shortcut:str=''):
+    if ctx.message.channel.category_id != 487701272309268484:
+        await ctx.send("Estás en un canal que no pertenece a ON-ROL")
+        return
+
     rich=Embed(title=text, color=0xffffff)
 
     if shortcut != '':
@@ -118,6 +122,6 @@ async def say(ctx, text:str, shortcut:str=''):
 
 @bot.command()
 async def combat(ctx):
-    await ctx.send(ctx.message.channel.category_id)
+    await ctx.send(ctx.message.channel.id)
 
 bot.run(bot_token)

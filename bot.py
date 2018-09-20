@@ -116,4 +116,8 @@ async def say(ctx, text:str, shortcut:str=''):
 
     await ctx.send(embed=rich)
 
+@bot.command()
+async def combat(ctx):
+    await ctx.send(ctx.message.channel.category_id)
+
 bot.run(bot_token)

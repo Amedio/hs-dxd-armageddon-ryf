@@ -122,6 +122,14 @@ async def say(ctx, text:str, shortcut:str=''):
 
 @bot.command()
 async def combat(ctx):
+    if ctx.message.channel.category_id != 487701272309268484:
+        await ctx.send("Estás en un canal que no pertenece a ON-ROL")
+        return
+        
+    if ctx.message.channel.id != 487659079725219861:
+        await ctx.send("Si quieres combatir ve a #arena-de-batalla")
+        return
+
     await ctx.send(ctx.message.channel.id)
 
 bot.run(bot_token)

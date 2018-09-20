@@ -112,7 +112,7 @@ async def say(ctx, text:str, shortcut:str=''):
     rich.set_author(name=row[2])
     rich.set_thumbnail(url=row[3])
 
-    ctx.message.delete()
+    await ctx.message.delete()
 
     await ctx.send(embed=rich)
 

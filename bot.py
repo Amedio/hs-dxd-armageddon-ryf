@@ -94,7 +94,13 @@ async def char(ctx, shortcut:str, name:str, thumbnail:str):
     if database.exists_char(shortcut):
         database.update_char(shortcut, name, thumbnail)
     else:
-        database.insert_char(shortcut, name, thumbnail, ctx.author.name)
+        is_master = False
+        for role in ctx.author.roles:
+            is_master = is_master or role.name == 'Esclavo de las letras'
+        if is_master or not database.player_has_char(ctx.author.name):
+            database.insert_char(shortcut, name, thumbnail, ctx.author.name)
+        else:
+            ctx.send('No eres el masta y ya tienes un personaje')
 
 @bot.command()
 async def say(ctx, text:str, shortcut:str=''):

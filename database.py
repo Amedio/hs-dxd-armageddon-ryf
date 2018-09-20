@@ -8,6 +8,11 @@ def exists_char(shortcut):
 
     return row != None
 
+def player_has_char(player):
+    row = select_char_player(player)
+
+    return row != None
+
 def insert_char(shortcut, name, thumbnail, player):
     conn = psycopg2.connect(database_url, sslmode='require')
     cur = conn.cursor()

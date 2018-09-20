@@ -121,7 +121,7 @@ async def say(ctx, text:str, shortcut:str=''):
     await ctx.send(embed=rich)
 
 @bot.command()
-async def combat(ctx):
+async def combat(ctx, enemy:discord.Member):
     if ctx.message.channel.category_id != 487701272309268484:
         await ctx.send("Estás en un canal que no pertenece a ON-ROL")
         return
@@ -130,6 +130,6 @@ async def combat(ctx):
         await ctx.send("Si quieres combatir ve a #arena-de-batalla")
         return
 
-    await ctx.send(ctx.message.channel.id)
+    await ctx.send('{0} desafía a {1} a un combate'.format(ctx.author.display_name, enemy.display_name))
 
 bot.run(bot_token)

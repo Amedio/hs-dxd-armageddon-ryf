@@ -94,9 +94,7 @@ async def char(ctx, shortcut:str, name:str, thumbnail:str):
     if database.exists_char(shortcut):
         database.update_char(shortcut, name, thumbnail)
     else:
-        is_master = False
-        for role in ctx.author.roles:
-            is_master = is_master or role.name == 'Esclavo de las letras'
+        is_master = ctx.author.id == 474238638708883476
         if is_master or not database.player_has_char(ctx.author.name):
             database.insert_char(shortcut, name, thumbnail, ctx.author.name)
         else:

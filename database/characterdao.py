@@ -1,17 +1,18 @@
 import os
 import psycopg2
+from model.character import Character
 
 database_url = os.environ['DATABASE_URL']
 
 def exists_char(shortcut):
-    row = select_char_shortcut(shortcut)
+    player_character = get_shortcut(shortcut)
 
-    return row != None
+    return player_character != None
 
 def player_has_char(player):
-    row = select_char_player(player)
+    player_character = get_player(player)
 
-    return row != None
+    return player_character != None
 
 def insert(shortcut, name, thumbnail, player):
     conn = psycopg2.connect(database_url, sslmode='require')
@@ -33,7 +34,7 @@ def update(shortcut, name, thumbnail):
     cur.close()
     conn.close()
 
-def select_char_shortcut(shortcut):
+def get_shortcut(shortcut):
     conn = psycopg2.connect(database_url, sslmode='require')
     cur = conn.cursor()
 
@@ -44,9 +45,13 @@ def select_char_shortcut(shortcut):
     cur.close()
     conn.close()
 
-    return row
+    if row != None:
+        player_character = Character(row[1], row[2], row[3], row[4])
+        return player_character
 
-def select_char_player(player):
+    return None
+
+def get_player(player):
     conn = psycopg2.connect(database_url, sslmode='require')
     cur = conn.cursor()
 
@@ -57,4 +62,8 @@ def select_char_player(player):
     cur.close()
     conn.close()
 
-    return row
+    if row != None:
+        player_character = Character(row[1], row[2], row[3], row[4])
+        return player_character
+
+    return None

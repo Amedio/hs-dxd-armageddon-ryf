@@ -109,12 +109,12 @@ async def say(ctx, text:str, shortcut:str=''):
     rich=Embed(title=text, color=0xffffff)
 
     if shortcut != '':
-        row = characterdao.select_char_shortcut(shortcut)
+        player_character = characterdao.get_shortcut(shortcut)
     else:
-        row = characterdao.select_char_player(ctx.author.name)
+        player_character = characterdao.get_player(ctx.author.name)
 
-    rich.set_author(name=row[2])
-    rich.set_thumbnail(url=row[3])
+    rich.set_author(name=player_character.name)
+    rich.set_thumbnail(url=player_character.thumbnail)
 
     await ctx.message.delete()
 

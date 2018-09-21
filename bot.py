@@ -114,12 +114,15 @@ async def say(ctx, text:str, shortcut:str=''):
     else:
         player_character = characterdao.get_player(ctx.author.name)
 
-    rich.set_author(name=player_character.name)
-    rich.set_thumbnail(url=player_character.thumbnail)
+    if player_character != None:
+        rich.set_author(name=player_character.name)
+        rich.set_thumbnail(url=player_character.thumbnail)
+
+        await ctx.send(embed=rich)
+    else:
+        await ctx.send('No tienes ningún personaje asignado o no se encuentra el personaje, utiliza **d!char** para crear tu personaje')
 
     await ctx.message.delete()
-
-    await ctx.send(embed=rich)
 
 @bot.command()
 async def combat(ctx, enemy:discord.Member):

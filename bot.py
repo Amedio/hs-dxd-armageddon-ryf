@@ -105,7 +105,9 @@ async def char(ctx, shortcut:str, name:str, thumbnail:str):
 async def say(ctx, text:str, shortcut:str=''):
     channel_role = channelroledao.get(ctx.channel.id)
     if channel_role == None or channel_role.role != 'on-rol':
-        await ctx.send("Estás en un canal que no pertenece a ON-ROL")
+        error_message = await ctx.send("Estás en un canal que no pertenece a ON-ROL")
+        await asyncio.sleep(5)
+        error_message.delete()
         return
 
     rich=Embed(title=text, color=0xffffff)
@@ -132,11 +134,15 @@ async def say(ctx, text:str, shortcut:str=''):
 async def combat(ctx, enemy:discord.Member):
     channel_role = channelroledao.get(ctx.channel.id)
     if channel_role == None or channel_role.role != 'on-rol':
-        await ctx.send("Estás en un canal que no pertenece a ON-ROL")
+        error_message = await ctx.send("Estás en un canal que no pertenece a ON-ROL")
+        await asyncio.sleep(5)
+        error_message.delete()
         return
         
     if ctx.message.channel.id != 487659079725219861:
-        await ctx.send("Si quieres combatir ve a #arena-de-batalla")
+        error_message = await ctx.send("Si quieres combatir ve a #arena-de-batalla")
+        await asyncio.sleep(5)
+        error_message.delete()
         return
 
     await ctx.message.delete()

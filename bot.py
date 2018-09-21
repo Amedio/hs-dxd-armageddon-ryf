@@ -135,4 +135,13 @@ async def combat(ctx, enemy:discord.Member):
     msg = await ctx.send('{0} desafía a {1} a un combate'.format(ctx.author.mention, enemy.mention))
     await msg.pin()
 
+@bot.group()
+async def config(ctx):
+    pass
+
+@config.command()
+async def chrole(ctx, role:str):
+    ctx.channel.id
+    await ctx.send('{0} has been assigned {1} role'.format(ctx.channel.mention, role))
+
 bot.run(bot_token)

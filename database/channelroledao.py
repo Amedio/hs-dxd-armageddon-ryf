@@ -4,6 +4,9 @@ from model.channelrole import ChannelRole
 
 database_url = os.environ['DATABASE_URL']
 
+def exists(channel_id):
+    return get(channel_id) != None
+
 def insert(channel_id, guild_id, role):
     conn = psycopg2.connect(database_url, sslmode='require')
     cur = conn.cursor()

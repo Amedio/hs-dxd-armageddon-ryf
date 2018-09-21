@@ -150,7 +150,11 @@ async def config(ctx):
 
 @config.command()
 async def chrole(ctx, role:str):
-    channelroledao.insert(ctx.channel.id, ctx.guild.id, role)
+    if not channelroledao.exists(ctx.channel.id):
+        channelroledao.insert(ctx.channel.id, ctx.guild.id, role)
+    else:
+        channelroledao.update(ctx.channel.id, role)
+
     await ctx.send('{0} has been assigned {1} role'.format(ctx.channel.mention, role))
 
 bot.run(bot_token)

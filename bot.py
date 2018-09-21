@@ -91,11 +91,11 @@ async def effect(ctx, dice_amount:int, bonus:int=0):
 
 @bot.command()
 async def char(ctx, shortcut:str, name:str, thumbnail:str):
-    if characterdao.exists_char(shortcut):
+    if characterdao.exists_shortcut(shortcut):
         characterdao.update(shortcut, name, thumbnail)
     else:
         is_master = ctx.author.id == 474238638708883476
-        if is_master or not characterdao.player_has_char(ctx.author.name):
+        if is_master or not characterdao.exists_player(ctx.author.name):
             characterdao.insert(shortcut, name, thumbnail, ctx.author.name)
         else:
             await ctx.send('No eres el masta y ya tienes un personaje')

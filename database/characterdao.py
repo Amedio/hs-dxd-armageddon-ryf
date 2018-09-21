@@ -4,12 +4,12 @@ from model.character import Character
 
 database_url = os.environ['DATABASE_URL']
 
-def exists_char(shortcut):
+def exists_shortcut(shortcut):
     player_character = get_shortcut(shortcut)
 
     return player_character != None
 
-def player_has_char(player):
+def exists_player(player):
     player_character = get_player(player)
 
     return player_character != None

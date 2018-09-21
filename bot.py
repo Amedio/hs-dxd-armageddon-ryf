@@ -121,7 +121,10 @@ async def say(ctx, text:str, shortcut:str=''):
 
         await ctx.send(embed=rich)
     else:
-        await ctx.send('No tienes ningún personaje asignado o no se encuentra el personaje, utiliza **d!char** para crear tu personaje')
+        result_message = await ctx.send('No tienes ningún personaje asignado o no se encuentra el personaje, utiliza **d!char** para crear tu personaje')
+        
+        await asyncio.sleep(5)
+        result_message.delete()
 
     await ctx.message.delete()
 

@@ -6,9 +6,9 @@ import asyncio
 import configparser
 import os
 import psycopg2
-import database
 from discord.ext import commands
 from discord import Embed
+from database import characterdao
 
 bot_token = os.environ['BOT_TOKEN']
 
@@ -91,12 +91,12 @@ async def effect(ctx, dice_amount:int, bonus:int=0):
 
 @bot.command()
 async def char(ctx, shortcut:str, name:str, thumbnail:str):
-    if database.exists_char(shortcut):
-        database.update_char(shortcut, name, thumbnail)
+    if characterdao.exists_char(shortcut):
+        characterdao.update_char(shortcut, name, thumbnail)
     else:
         is_master = ctx.author.id == 474238638708883476
-        if is_master or not database.player_has_char(ctx.author.name):
-            database.insert_char(shortcut, name, thumbnail, ctx.author.name)
+        if is_master or not characterdao.player_has_char(ctx.author.name):
+            characterdao.insert_char(shortcut, name, thumbnail, ctx.author.name)
         else:
             await ctx.send('No eres el masta y ya tienes un personaje')
 
@@ -109,9 +109,9 @@ async def say(ctx, text:str, shortcut:str=''):
     rich=Embed(title=text, color=0xffffff)
 
     if shortcut != '':
-        row = database.select_char_shortcut(shortcut)
+        row = characterdao.select_char_shortcut(shortcut)
     else:
-        row = database.select_char_player(ctx.author.name)
+        row = characterdao.select_char_player(ctx.author.name)
 
     rich.set_author(name=row[2])
     rich.set_thumbnail(url=row[3])

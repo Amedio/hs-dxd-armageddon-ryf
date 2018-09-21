@@ -103,7 +103,7 @@ async def char(ctx, shortcut:str, name:str, thumbnail:str):
 
 @bot.command()
 async def say(ctx, text:str, shortcut:str=''):
-    if ctx.message.channel.category_id != 487701272309268484:
+    if channelroledao.get(ctx.channel.id).role != 'on-rol':
         await ctx.send("Estás en un canal que no pertenece a ON-ROL")
         return
 

@@ -103,7 +103,8 @@ async def char(ctx, shortcut:str, name:str, thumbnail:str):
 
 @bot.command()
 async def say(ctx, text:str, shortcut:str=''):
-    if channelroledao.get(ctx.channel.id).role != 'on-rol':
+    channel_role = channelroledao.get(ctx.channel.id)
+    if channel_role == None or channel_role.role != 'on-rol':
         await ctx.send("Estás en un canal que no pertenece a ON-ROL")
         return
 
@@ -126,7 +127,8 @@ async def say(ctx, text:str, shortcut:str=''):
 
 @bot.command()
 async def combat(ctx, enemy:discord.Member):
-    if channelroledao.get(ctx.channel.id).role != 'on-rol':
+    channel_role = channelroledao.get(ctx.channel.id)
+    if channel_role == None or channel_role.role != 'on-rol':
         await ctx.send("Estás en un canal que no pertenece a ON-ROL")
         return
         

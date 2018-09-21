@@ -13,7 +13,7 @@ def player_has_char(player):
 
     return row != None
 
-def insert_char(shortcut, name, thumbnail, player):
+def insert(shortcut, name, thumbnail, player):
     conn = psycopg2.connect(database_url, sslmode='require')
     cur = conn.cursor()
 
@@ -23,7 +23,7 @@ def insert_char(shortcut, name, thumbnail, player):
     cur.close()
     conn.close()
 
-def update_char(shortcut, name, thumbnail):
+def update(shortcut, name, thumbnail):
     conn = psycopg2.connect(database_url, sslmode='require')
     cur = conn.cursor()
 

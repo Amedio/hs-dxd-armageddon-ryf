@@ -107,7 +107,7 @@ async def say(ctx, text:str, shortcut:str=''):
     if channel_role == None or channel_role.role != 'on-rol':
         error_message = await ctx.send("Estás en un canal que no pertenece a ON-ROL")
         await asyncio.sleep(5)
-        error_message.delete()
+        await error_message.delete()
         return
 
     rich=Embed(title=text, color=0xffffff)
@@ -126,7 +126,7 @@ async def say(ctx, text:str, shortcut:str=''):
         result_message = await ctx.send('No tienes ningún personaje asignado o no se encuentra el personaje, utiliza **d!char** para crear tu personaje')
         
         await asyncio.sleep(5)
-        result_message.delete()
+        await result_message.delete()
 
     await ctx.message.delete()
 
@@ -136,13 +136,13 @@ async def combat(ctx, enemy:discord.Member):
     if channel_role == None or channel_role.role != 'on-rol':
         error_message = await ctx.send("Estás en un canal que no pertenece a ON-ROL")
         await asyncio.sleep(5)
-        error_message.delete()
+        await error_message.delete()
         return
         
     if ctx.message.channel.id != 487659079725219861:
         error_message = await ctx.send("Si quieres combatir ve a #arena-de-batalla")
         await asyncio.sleep(5)
-        error_message.delete()
+        await error_message.delete()
         return
 
     await ctx.message.delete()

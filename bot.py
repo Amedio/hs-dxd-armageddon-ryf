@@ -9,6 +9,7 @@ import psycopg2
 from discord.ext import commands
 from discord import Embed
 from database import characterdao
+from database import channelroledao
 
 bot_token = os.environ['BOT_TOKEN']
 
@@ -122,7 +123,7 @@ async def say(ctx, text:str, shortcut:str=''):
 
 @bot.command()
 async def combat(ctx, enemy:discord.Member):
-    if ctx.message.channel.category_id != 487701272309268484:
+    if channelroledao.get(ctx.channel.id).role != 'on-rol':
         await ctx.send("Estás en un canal que no pertenece a ON-ROL")
         return
         

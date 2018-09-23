@@ -25,7 +25,7 @@ async def on_ready():
 @bot.event
 async def on_message(message):
     channel_role = channelroledao.get(message.channel.id)
-    if channel_role == None or channel_role.role == 'on-rol':
+    if channel_role != None and channel_role.role == 'on-rol':
         await message.delete()
 
 @bot.command()

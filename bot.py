@@ -22,12 +22,6 @@ async def on_ready():
     print(bot.user.id)
     print('------')
 
-@bot.event
-async def on_message(message):
-    channel_role = channelroledao.get(message.channel.id)
-    if channel_role != None and channel_role.role == 'on-rol' and 'd!' not in message.content:
-        await message.delete()
-
 @bot.command()
 async def roll(ctx, bonus:int=0, difficulty:int=0, dice:str='n'):
     dice_index = 1

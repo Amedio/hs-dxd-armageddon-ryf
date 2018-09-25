@@ -103,6 +103,8 @@ async def char(ctx, shortcut:str, name:str, thumbnail:str):
 
 @bot.command()
 async def say(ctx, text:str, shortcut:str=''):
+    await ctx.message.delete()
+    
     channel_role = channelroledao.get(ctx.channel.id)
     if channel_role == None or channel_role.role != 'on-rol':
         error_message = await ctx.send("Estás en un canal que no pertenece a ON-ROL")
@@ -128,8 +130,6 @@ async def say(ctx, text:str, shortcut:str=''):
         await asyncio.sleep(5)
         await result_message.delete()
 
-    await ctx.message.delete()
-
 @bot.command()
 async def combat(ctx, enemy:discord.Member):
     await ctx.message.delete()
@@ -152,6 +152,7 @@ async def config(ctx):
 
 @config.command()
 async def chrole(ctx, role:str):
+    await ctx.message.delete()
     if not channelroledao.exists(ctx.channel.id):
         channelroledao.insert(ctx.channel.id, ctx.guild.id, role)
     else:

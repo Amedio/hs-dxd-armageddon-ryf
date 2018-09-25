@@ -132,6 +132,8 @@ async def say(ctx, text:str, shortcut:str=''):
 
 @bot.command()
 async def combat(ctx, enemy:discord.Member):
+    await ctx.message.delete()
+
     channel_role = channelroledao.get(ctx.channel.id)
     if channel_role == None or channel_role.role != 'combat':
         combat_role = channelroledao.combat()
@@ -140,8 +142,6 @@ async def combat(ctx, enemy:discord.Member):
         await asyncio.sleep(5)
         await error_message.delete()
         return
-
-    await ctx.message.delete()
 
     msg = await ctx.send('{0} desafía a {1} a un combate'.format(ctx.author.mention, enemy.mention))
     await msg.pin()

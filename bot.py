@@ -10,6 +10,7 @@ from discord.ext import commands
 from discord import Embed
 from database import characterdao
 from database import channelroledao
+from database import memberroledao
 
 bot_token = os.environ['BOT_TOKEN']
 
@@ -159,6 +160,17 @@ async def chrole(ctx, role:str):
     else:
         channelroledao.update(ctx.channel.id, role)
 
-    await ctx.send('{0} has been assigned {1} role'.format(ctx.channel.mention, role))
+    await ctx.send('{0} has been assigned **{1}** role'.format(ctx.channel.mention, role))
+
+@config.command()
+async def usrole(ctx, role:str, user:discord.Member):
+    await ctx.message.delete()
+    
+    if not memberroledao.exists(user.id):
+        memberroledao.insert(user.id, ctx.guild.id, role)
+    else:
+        memberroledao.update(user.id, role)
+
+    await ctx.send('{0} has been assigned **{1}** role'.format(user.mention, role))
 
 bot.run(bot_token)

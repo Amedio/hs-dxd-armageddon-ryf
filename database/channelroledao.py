@@ -43,6 +43,7 @@ def get(channel_id):
         return channel_role
 
     return None
+    
 def combat():
     conn = psycopg2.connect(database_url, sslmode='require')
     cur = conn.cursor()

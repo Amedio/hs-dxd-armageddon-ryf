@@ -135,7 +135,7 @@ async def combat(ctx, enemy:discord.Member):
     channel_role = channelroledao.get(ctx.channel.id)
     if channel_role == None or channel_role.role != 'combat':
         combat_role = channelroledao.combat()
-        combat_channel = bot.get_channel(combat_role.channel_id)
+        combat_channel = bot.get_channel(int(combat_role.channel_id))
         error_message = await ctx.send("Si quieres combatir ve a {0}".format(combat_channel.mention))
         await asyncio.sleep(5)
         await error_message.delete()

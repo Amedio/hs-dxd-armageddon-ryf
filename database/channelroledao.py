@@ -43,3 +43,19 @@ def get(channel_id):
         return channel_role
 
     return None
+def combat():
+    conn = psycopg2.connect(database_url, sslmode='require')
+    cur = conn.cursor()
+
+    cur.execute("SELECT * FROM channel_role WHERE role = 'combat'")
+
+    row = cur.fetchone()
+
+    cur.close()
+    conn.close()
+    
+    if row != None:
+        channel_role = ChannelRole(row[1], row[2], row[3])
+        return channel_role
+
+    return None

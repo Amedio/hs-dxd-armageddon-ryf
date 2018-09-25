@@ -133,14 +133,9 @@ async def say(ctx, text:str, shortcut:str=''):
 @bot.command()
 async def combat(ctx, enemy:discord.Member):
     channel_role = channelroledao.get(ctx.channel.id)
-    if channel_role == None or channel_role.role != 'on-rol':
-        error_message = await ctx.send("Estás en un canal que no pertenece a ON-ROL")
-        await asyncio.sleep(5)
-        await error_message.delete()
-        return
-        
-    if ctx.message.channel.id != 487659079725219861:
-        error_message = await ctx.send("Si quieres combatir ve a #arena-de-batalla")
+    if channel_role == None or channel_role.role != 'combat':
+        combat_role = channelroledao.combat()
+        error_message = await ctx.send("Si quieres combatir ve a {0}".format(discord.utils.get(ctx.guild.text_channels, id=combat_role.channel_id)))
         await asyncio.sleep(5)
         await error_message.delete()
         return

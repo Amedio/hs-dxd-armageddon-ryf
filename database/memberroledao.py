@@ -44,11 +44,11 @@ def get(member_id):
 
     return None
     
-def admin():
+def masta():
     conn = psycopg2.connect(database_url, sslmode='require')
     cur = conn.cursor()
 
-    cur.execute("SELECT * FROM member_role WHERE role = 'admin'")
+    cur.execute("SELECT * FROM member_role WHERE role = 'masta'")
 
     row = cur.fetchone()
 

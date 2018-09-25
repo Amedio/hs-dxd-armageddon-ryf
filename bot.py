@@ -96,7 +96,8 @@ async def char(ctx, shortcut:str, name:str, thumbnail:str):
     if characterdao.exists_shortcut(shortcut):
         characterdao.update(shortcut, name, thumbnail)
     else:
-        is_master = ctx.author.id == 474238638708883476
+        member_role = memberroledao.get(ctx.author.id)
+        is_master = member_role != None and member_role.role == 'masta'
         if is_master or not characterdao.exists_player(ctx.author.name):
             characterdao.insert(shortcut, name, thumbnail, ctx.author.name)
         else:

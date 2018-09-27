@@ -108,7 +108,7 @@ async def say(ctx, text:str, shortcut:str=''):
     await ctx.message.delete()
 
     channel_role = channelroledao.get(ctx.channel.id)
-    if channel_role == None or channel_role.role != 'on-rol' or channel_role.role != 'combat':
+    if channel_role == None or (channel_role.role != 'on-rol' and channel_role.role != 'combat'):
         error_message = await ctx.send("Estás en un canal que no pertenece a ON-ROL")
         await asyncio.sleep(5)
         await error_message.delete()

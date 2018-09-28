@@ -98,8 +98,8 @@ async def char(ctx, shortcut:str, name:str, thumbnail:str):
     else:
         member_role = memberroledao.get(ctx.author.id)
         is_master = member_role != None and member_role.role == 'masta'
-        if is_master or not characterdao.exists_player(ctx.author.name):
-            characterdao.insert(shortcut, name, thumbnail, ctx.author.name)
+        if is_master or not characterdao.exists_player(ctx.author.id):
+            characterdao.insert(shortcut, name, thumbnail, ctx.author.id)
         else:
             await ctx.send('No eres el masta y ya tienes un personaje')
 
@@ -119,7 +119,7 @@ async def say(ctx, text:str, shortcut:str=''):
     if shortcut != '':
         player_character = characterdao.get_shortcut(shortcut)
     else:
-        player_character = characterdao.get_player(ctx.author.name)
+        player_character = characterdao.get_player(ctx.author.id)
 
     if player_character != None:
         rich.set_author(name=player_character.name)

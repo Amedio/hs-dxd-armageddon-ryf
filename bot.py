@@ -174,4 +174,8 @@ async def usrole(ctx, role:str, user:discord.Member):
 
     await ctx.send('{0} has been assigned **{1}** role'.format(user.mention, role))
 
+@config.command()
+async def userid(ctx, user:discord.Member):
+    await ctx.send(user.id)
+
 bot.run(bot_token)

@@ -1,2 +1,3 @@
 https://github.com/Rapptz/discord.py/archive/rewrite.zip
 psycopg2-binary
+validator-collection

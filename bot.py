@@ -6,6 +6,7 @@ import asyncio
 import configparser
 import os
 import psycopg2
+from validator_collection import checkers
 from discord.ext import commands
 from discord import Embed
 from database import characterdao
@@ -93,6 +94,12 @@ async def effect(ctx, dice_amount:int, bonus:int=0):
 
 @bot.command()
 async def char(ctx, shortcut:str, name:str, thumbnail:str):
+    if not checkers.is_url(thumbnail):
+        error_message = await ctx.send('El valor {0} para *thumbnail* no es una URL'.format(thumbnail))
+        await asyncio.sleep(10)
+        await error_message.delete()
+        return
+
     if characterdao.exists_shortcut_guild(shortcut, ctx.guild.id):
         characterdao.update(shortcut, name, thumbnail, ctx.guild.id)
     else:

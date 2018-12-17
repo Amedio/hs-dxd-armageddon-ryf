@@ -95,7 +95,7 @@ async def effect(ctx, dice_amount:int, bonus:int=0):
 @bot.command()
 async def char(ctx, shortcut:str, name:str, thumbnail:str):
     if not checkers.is_url(thumbnail):
-        error_message = await ctx.send('El valor {0} para *thumbnail* no es una URL'.format(thumbnail))
+        error_message = await ctx.send('El valor **{0}** para *thumbnail* no es una URL'.format(thumbnail))
         await asyncio.sleep(10)
         await error_message.delete()
         return

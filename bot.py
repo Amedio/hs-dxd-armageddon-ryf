@@ -93,13 +93,13 @@ async def effect(ctx, dice_amount:int, bonus:int=0):
 
 @bot.command()
 async def char(ctx, shortcut:str, name:str, thumbnail:str):
-    if characterdao.exists_shortcut(shortcut):
-        characterdao.update(shortcut, name, thumbnail)
+    if characterdao.exists_shortcut_guild(shortcut, ctx.guild.id):
+        characterdao.update(shortcut, name, thumbnail, ctx.guild.id)
     else:
         member_role = memberroledao.get(ctx.author.id)
         is_master = member_role != None and member_role.role == 'masta'
         if is_master or not characterdao.exists_player(ctx.author.id):
-            characterdao.insert(shortcut, name, thumbnail, ctx.author.id)
+            characterdao.insert(shortcut, name, thumbnail, ctx.author.id, ctx.guild.id)
         else:
             await ctx.send('No eres el masta y ya tienes un personaje')
 
@@ -117,9 +117,9 @@ async def say(ctx, text:str, shortcut:str=''):
     rich=Embed(title=text, color=0xffffff)
 
     if shortcut != '':
-        player_character = characterdao.get_shortcut(shortcut)
+        player_character = characterdao.get_shortcut_guild(shortcut, ctx.guild.id)
     else:
-        player_character = characterdao.get_player(ctx.author.id)
+        player_character = characterdao.get_player_guild(ctx.author.id, ctx.guild.id)
 
     if player_character != None:
         rich.set_author(name=player_character.name)

@@ -182,7 +182,7 @@ async def char_dev(ctx):
     else:
         member_role = memberroledao.get(ctx.author.id)
         is_master = member_role != None and member_role.role == 'masta'
-        if is_master or not characterdao.exists_player(ctx.author.id):
+        if is_master or not characterdao.exists_player_guild(ctx.author.id, ctx.guild.id):
             query_name = await ctx.send("Escribe el nombre de tu personaje:")
             response_name = await bot.wait_for('message', check=pred)
             name = response_name.content

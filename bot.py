@@ -74,7 +74,7 @@ async def roll(ctx, bonus:int=0, difficulty:int=0, dice:str='n', e_dice_amount:i
     await ctx.send(embed=rich)
 
     if total >= difficulty and e_dice_amount > 0:
-        effect(ctx, e_dice_amount, e_bonus)
+        await effect(ctx, e_dice_amount, e_bonus)
 
 @bot.command()
 async def effect(ctx, dice_amount:int, bonus:int=0):

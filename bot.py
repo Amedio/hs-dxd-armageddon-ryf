@@ -155,7 +155,7 @@ async def char_dev(ctx):
             characterdao.update(shortcut, name, thumbnail, ctx.guild.id)
             return
     else:
-        member_role = memberroledao.get(ctx.author.id)
+        member_role = memberroledao.get(ctx.author.id, ctx.guild.id)
         is_master = member_role != None and member_role.role == 'masta'
         if is_master or not characterdao.exists_player_guild(ctx.author.id, ctx.guild.id):
             starting_creation = await ctx.send("{0.author.display_name} comienza la creación de un personaje".format(ctx))
@@ -196,7 +196,7 @@ async def char(ctx, shortcut:str="", name:str="", thumbnail:str=""):
     if characterdao.exists_shortcut_guild(shortcut, ctx.guild.id):
         characterdao.update(shortcut, name, thumbnail, ctx.guild.id)
     else:
-        member_role = memberroledao.get(ctx.author.id)
+        member_role = memberroledao.get(ctx.author.id, ctx.guild.id)
         is_master = member_role != None and member_role.role == 'masta'
         if is_master or not characterdao.exists_player(ctx.author.id):
             characterdao.insert(shortcut, name, thumbnail, ctx.author.id, ctx.guild.id)
@@ -267,7 +267,7 @@ async def chrole(ctx, role:str):
 async def usrole(ctx, role:str, user:discord.Member):
     await ctx.message.delete()
     
-    if not memberroledao.exists(user.id):
+    if not memberroledao.exists(user.id, ctx.guild.id):
         memberroledao.insert(user.id, ctx.guild.id, role)
     else:
         memberroledao.update(user.id, role)

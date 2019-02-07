@@ -4,8 +4,8 @@ from model.memberrole import MemberRole
 
 database_url = os.environ['DATABASE_URL']
 
-def exists(member_id):
-    return get(member_id) != None
+def exists(member_id, guild_id):
+    return get(member_id, guild_id) != None
 
 def insert(member_id, guild_id, role):
     conn = psycopg2.connect(database_url, sslmode='require')
@@ -27,11 +27,11 @@ def update(member_id, role):
     cur.close()
     conn.close()
 
-def get(member_id):
+def get(member_id, guild_id):
     conn = psycopg2.connect(database_url, sslmode='require')
     cur = conn.cursor()
 
-    cur.execute("SELECT * FROM member_role WHERE member_id = '{0}'".format(member_id))
+    cur.execute("SELECT * FROM member_role WHERE member_id = '{0}' AND guild_id = '{1}'".format(member_id, guild_id))
 
     row = cur.fetchone()
 

@@ -176,7 +176,7 @@ async def char_dev(ctx):
             await ctx.send("Creación del personaje cancelada")
             return
         elif whichpartedit == '3':
-            await.ctx.send("Guardando personaje...")
+            await ctx.send("Guardando personaje...")
             characterdao.update(shortcut, name, thumbnail, ctx.guild.id)
             return
     else:

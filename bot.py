@@ -122,9 +122,14 @@ async def char_dev(ctx):
 
     if characterdao.exists_shortcut_guild(shortcut, ctx.guild.id):
         character = characterdao.get_shortcut_guild(shortcut, ctx.guild.id)
-        rich = Embed(title="El personaje tendrá el atajo: {0}".format(character.shortcut), color=0xffffff)
-        rich.set_author(name=character.name)
-        rich.set_thumbnail(url=character.thumbnail)
+
+        shortcut = character.shortcut
+        name = character.name
+        thumbnail = character.thumbnail
+
+        rich = Embed(title="El personaje tendrá el atajo: {0}".format(shortcut), color=0xffffff)
+        rich.set_author(name=name)
+        rich.set_thumbnail(url=thumbnail)
 
         char_preview = await ctx.send(embed=rich)
         query_wichpartedit = await ctx.send("Elige el número del atributo que quieres cambiar:\n1. Nombre\n2. Avatar\n3. Guardar\n4. Cancelar")
@@ -154,9 +159,9 @@ async def char_dev(ctx):
                 await query_name.delete()
                 await response_name.delete()
 
-            rich = Embed(title="El personaje tendrá el atajo: {0}".format(character.shortcut), color=0xffffff)
-            rich.set_author(name=character.name)
-            rich.set_thumbnail(url=character.thumbnail)
+            rich = Embed(title="El personaje tendrá el atajo: {0}".format(shortcut), color=0xffffff)
+            rich.set_author(name=name)
+            rich.set_thumbnail(url=thumbnail)
 
             char_preview = await ctx.send(embed=rich)
             query_wichpartedit = await ctx.send("Elige el número del atributo que quieres cambiar:\n1. Nombre\n2. Avatar\n3. Guardar\n4. Cancelar")
@@ -172,6 +177,7 @@ async def char_dev(ctx):
             return
         else if whichpartedit == '3':
             await.ctx.send("Guardando personaje...")
+            characterdao.update(shortcut, name, thumbnail, ctx.guild.id)
             return
     else:
         member_role = memberroledao.get(ctx.author.id)

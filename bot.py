@@ -98,7 +98,7 @@ async def effect_call(ctx, dice_amount:int, bonus:int=0):
 
     total = total_roll + bonus
 
-    rich=Embed(title="El resultado de la tirada de {0.author.display_name} es **{1}**".format(ctx, total), color=0xffffff)
+    rich = Embed(title="El resultado de la tirada de {0.author.display_name} es **{1}**".format(ctx, total), color=0xffffff)
     rich.add_field(name="tirada", value=all_rolls, inline=True)
     rich.add_field(name="total", value=total_roll, inline=True)
     if bonus > 0:
@@ -113,11 +113,24 @@ async def char_dev(ctx, shortcut:str="", name:str="", thumbnail:str=""):
         return m.author == ctx.author and m.channel == ctx.channel
 
     if shortcut == "":
-        await ctx.send("Dime un atajo para referirme a el:")
+        await ctx.send("{0.author.display_name} comienza la creación de un personaje".format(ctx))
+        await ctx.send("Escribe un atajo para referirte a tu personaje:")
         response = await bot.wait_for('message', check=pred)
         shortcut = response.content
+
+        await ctx.send("Escribe el nombre de tu personaje:")
+        response = await bot.wait_for('message', check=pred)
+        name = response.content
+
+        await ctx.send("Escribe la url del avatar de tu personaje:")
+        response = await bot.wait_for('message', check=pred)
+        thumbnail = response.content
     
-    await ctx.send("El personaje tendrá el atajo: " + shortcut)
+    rich = Embed(title="El personaje tendrá el atajo: {0}".format(shortcut), color=0xffffff)
+    rich.set_author(name=name)
+    rich.set_thumbnail(url=thumbnail)
+    
+    await ctx.send(embed=rich)
 
 
 @bot.command()

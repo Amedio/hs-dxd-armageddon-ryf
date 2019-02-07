@@ -117,7 +117,7 @@ async def char_dev(ctx):
     query_shortcut = await ctx.send("Escribe un atajo para referirte a tu personaje:")
     response_shortcut = await bot.wait_for('message', check=pred)
     shortcut = response_shortcut.content
-    
+
     await delete_messages(query_shortcut, response_shortcut)
 
     if characterdao.exists_shortcut_guild(shortcut, ctx.guild.id):
@@ -174,41 +174,47 @@ async def char_dev(ctx):
             await.ctx.send("Guardando personaje...")
             return
     else:
-        query_name = await ctx.send("Escribe el nombre de tu personaje:")
-        response_name = await bot.wait_for('message', check=pred)
-        name = response_name.content
-        await query_name.delete()
-        await response_name.delete()
+        member_role = memberroledao.get(ctx.author.id)
+        is_master = member_role != None and member_role.role == 'masta'
+        if is_master or not characterdao.exists_player(ctx.author.id):
+            query_name = await ctx.send("Escribe el nombre de tu personaje:")
+            response_name = await bot.wait_for('message', check=pred)
+            name = response_name.content
+            await query_name.delete()
+            await response_name.delete()
 
-        query_thumbnail = await ctx.send("Escribe la url del avatar de tu personaje:")
-        response_thumbnail = await bot.wait_for('message', check=pred)
-        thumbnail = response_thumbnail.content
-        await query_thumbnail.delete()
-        await response_thumbnail.delete()
-        await starting_creation.delete()
+            query_thumbnail = await ctx.send("Escribe la url del avatar de tu personaje:")
+            response_thumbnail = await bot.wait_for('message', check=pred)
+            thumbnail = response_thumbnail.content
+            await query_thumbnail.delete()
+            await response_thumbnail.delete()
+            await starting_creation.delete()
 
-        if not checkers.is_url(thumbnail):
-            error_message = await ctx.send('El valor **{0}** para *thumbnail* no es una URL'.format(thumbnail))
-            await asyncio.sleep(10)
-            await error_message.delete()
-            return
-        
-        rich = Embed(title="El personaje tendrá el atajo: {0}".format(shortcut), color=0xffffff)
-        rich.set_author(name=name)
-        rich.set_thumbnail(url=thumbnail)
-        
-        char_preview = await ctx.send(embed=rich)
-        query_confirmation = await ctx.send("Confirma los datos del personaje (s o n):")
-        response_confirmation = await bot.wait_for('message', check=pred)
-        confirmation = response_confirmation.content
-        await char_preview.delete()
-        await query_confirmation.delete()
-        await response_confirmation.delete()
+            if not checkers.is_url(thumbnail):
+                error_message = await ctx.send('El valor **{0}** para *thumbnail* no es una URL'.format(thumbnail))
+                await asyncio.sleep(10)
+                await error_message.delete()
+                return
+            
+            rich = Embed(title="El personaje tendrá el atajo: {0}".format(shortcut), color=0xffffff)
+            rich.set_author(name=name)
+            rich.set_thumbnail(url=thumbnail)
+            
+            char_preview = await ctx.send(embed=rich)
+            query_confirmation = await ctx.send("Confirma los datos del personaje (s o n):")
+            response_confirmation = await bot.wait_for('message', check=pred)
+            confirmation = response_confirmation.content
+            await char_preview.delete()
+            await query_confirmation.delete()
+            await response_confirmation.delete()
 
-        if confirmation == 's':
-            await ctx.send("Creando el personaje...")
+            if confirmation == 's':
+                await ctx.send("Creando el personaje...")
+                characterdao.insert(shortcut, name, thumbnail, ctx.author.id, ctx.guild.id)
+            else:
+                await ctx.send("Creación del personaje cancelada")
         else:
-            await ctx.send("Creación del personaje cancelada")
+            await ctx.send('No eres el masta y ya tienes un personaje')
 
 @bot.command()
 async def char(ctx, shortcut:str="", name:str="", thumbnail:str=""):

@@ -68,7 +68,7 @@ async def roll(ctx, bonus:int=0, difficulty:int=0, dice:str='n', e_dice_amount:i
                 rich.add_field(name="resultado", value="FALLO", inline=True)
             if total - difficulty >= 10:
                 rich.add_field(name="crítico", value="CRÍTICO", inline=True)
-                critical_times = total - difficulty / 10
+                critical_times = total - difficulty // 10
                 e_dice_amount = e_dice_amount + critical_times
 
     await ctx.send(embed=rich)

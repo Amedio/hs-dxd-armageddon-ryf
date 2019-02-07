@@ -70,13 +70,13 @@ async def roll(ctx, skill_bonus:int=0, skill_difficulty:int=0, e_dice_amount:int
                 if e_dice_amount > 0:
                     critical_times = (total - skill_difficulty) // 10
                     e_dice_amount = e_dice_amount + critical_times
-                    rich.add_field(name="crítico", value="CRÍTICO " + critical_times + " veces", inline=True)
+                    rich.add_field(name="crítico", value="CRÍTICO " + str(critical_times) + " veces", inline=True)
                 else:
                     rich.add_field(name="crítico", value="CRÍTICO", inline=True)
 
     await ctx.send(embed=rich)
 
-    if total >= skill_difficulty and e_dice_amount - critical_times > 0:
+    if total >= skill_difficulty and e_dice_amount > 0:
         await effect_call(ctx, e_dice_amount, e_bonus)
 
 @bot.command()

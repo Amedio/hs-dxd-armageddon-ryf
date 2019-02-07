@@ -107,13 +107,10 @@ async def effect_call(ctx, dice_amount:int, bonus:int=0):
     await ctx.send(embed=rich)
 
 @bot.command()
-async def char_dev(ctx):
-    await ctx.message.delete()
-    
+async def char_dev(ctx):    
     def pred(m):
         return m.author == ctx.author and m.channel == ctx.channel
 
-    starting_creation = await ctx.send("{0.author.display_name} comienza la creación de un personaje".format(ctx))
     query_shortcut = await ctx.send("Escribe un atajo para referirte a tu personaje:")
     response_shortcut = await bot.wait_for('message', check=pred)
     shortcut = response_shortcut.content
@@ -136,16 +133,14 @@ async def char_dev(ctx):
         response_whichpartedit = await bot.wait_for('message', check=pred)
         whichpartedit = response_whichpartedit.content
 
-        await delete_messages(char_preview, query_wichpartedit, response_whichpartedit)
+        await delete_messages(query_wichpartedit, response_whichpartedit)
 
         while whichpartedit != '4' and whichpartedit != '3':
             if whichpartedit == '2':
                 query_thumbnail = await ctx.send("Escribe la url del avatar de tu personaje:")
                 response_thumbnail = await bot.wait_for('message', check=pred)
                 thumbnail = response_thumbnail.content
-                await query_thumbnail.delete()
-                await response_thumbnail.delete()
-                await starting_creation.delete()
+                await delete_messages(query_thumbnail, response_thumbnail)
 
                 if not checkers.is_url(thumbnail):
                     error_message = await ctx.send('El valor **{0}** para *thumbnail* no es una URL'.format(thumbnail))
@@ -156,9 +151,9 @@ async def char_dev(ctx):
                 query_name = await ctx.send("Escribe el nombre de tu personaje:")
                 response_name = await bot.wait_for('message', check=pred)
                 name = response_name.content
-                await query_name.delete()
-                await response_name.delete()
+                await delete_messages(query_name, response_name)
 
+            await delete_messages(char_preview)
             rich = Embed(title="El personaje tendrá el atajo: {0}".format(shortcut), color=0xffffff)
             rich.set_author(name=name)
             rich.set_thumbnail(url=thumbnail)
@@ -168,9 +163,9 @@ async def char_dev(ctx):
             response_whichpartedit = await bot.wait_for('message', check=pred)
             whichpartedit = response_whichpartedit.content
 
-            await char_preview.delete()
-            await query_wichpartedit.delete()
-            await response_whichpartedit.delete()
+            await delete_messages(query_wichpartedit, response_whichpartedit)
+
+        await delete_messages(char_preview)
 
         if whichpartedit == '4':
             await ctx.send("Creación del personaje cancelada")
@@ -183,6 +178,8 @@ async def char_dev(ctx):
         member_role = memberroledao.get(ctx.author.id)
         is_master = member_role != None and member_role.role == 'masta'
         if is_master or not characterdao.exists_player_guild(ctx.author.id, ctx.guild.id):
+            starting_creation = await ctx.send("{0.author.display_name} comienza la creación de un personaje".format(ctx))
+
             query_name = await ctx.send("Escribe el nombre de tu personaje:")
             response_name = await bot.wait_for('message', check=pred)
             name = response_name.content

@@ -107,30 +107,47 @@ async def effect_call(ctx, dice_amount:int, bonus:int=0):
     await ctx.send(embed=rich)
 
 @bot.command()
-async def char_dev(ctx, shortcut:str="", name:str="", thumbnail:str=""):
+async def char_dev(ctx):
     
     def pred(m):
         return m.author == ctx.author and m.channel == ctx.channel
 
-    if shortcut == "":
-        await ctx.send("{0.author.display_name} comienza la creación de un personaje".format(ctx))
-        await ctx.send("Escribe un atajo para referirte a tu personaje:")
-        response = await bot.wait_for('message', check=pred)
-        shortcut = response.content
+    await ctx.send("{0.author.display_name} comienza la creación de un personaje".format(ctx))
+    query_shortcut = await ctx.send("Escribe un atajo para referirte a tu personaje:")
+    response_shortcut = await bot.wait_for('message', check=pred)
+    shortcut = response_shortcut.content
+    await query_shortcut.delete()
+    await response_shortcut.delete()
 
-        await ctx.send("Escribe el nombre de tu personaje:")
-        response = await bot.wait_for('message', check=pred)
-        name = response.content
+    query_name = await ctx.send("Escribe el nombre de tu personaje:")
+    response_name = await bot.wait_for('message', check=pred)
+    name = response_name.content
+    await query_name.delete()
+    await response_name.delete()
 
-        await ctx.send("Escribe la url del avatar de tu personaje:")
-        response = await bot.wait_for('message', check=pred)
-        thumbnail = response.content
+    query_thumbnail = await ctx.send("Escribe la url del avatar de tu personaje:")
+    response_thumbnail = await bot.wait_for('message', check=pred)
+    thumbnail = response_thumbnail.content
+    await query_thumbnail.delete()
+    await response_thumbnail.delete()
+
+    if not checkers.is_url(thumbnail):
+        error_message = await ctx.send('El valor **{0}** para *thumbnail* no es una URL'.format(thumbnail))
+        await asyncio.sleep(10)
+        await error_message.delete()
+        return
     
     rich = Embed(title="El personaje tendrá el atajo: {0}".format(shortcut), color=0xffffff)
     rich.set_author(name=name)
     rich.set_thumbnail(url=thumbnail)
     
-    await ctx.send(embed=rich)
+    char_preview = await ctx.send(embed=rich)
+    query_confirmation = await ctx.send("Confirma los datos del personaje (s o n):")
+    response_confirmation = await bot.wait_for('message', check=pred)
+    if response_confirmation.content == 's':
+        await ctx.send("Creando el personaje...")
+    else:
+        await ctx.send("Creación del personaje cancelada")
 
 
 @bot.command()

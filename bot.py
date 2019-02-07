@@ -107,15 +107,8 @@ async def effect_call(ctx, dice_amount:int, bonus:int=0):
     await ctx.send(embed=rich)
 
 @bot.command()
-async def char_dev(ctx):    
-    def pred(m):
-        return m.author == ctx.author and m.channel == ctx.channel
-
-    query_shortcut = await ctx.send("Escribe un atajo para referirte a tu personaje:")
-    response_shortcut = await bot.wait_for('message', check=pred)
-    shortcut = response_shortcut.content
-
-    await delete_messages(query_shortcut, response_shortcut)
+async def char_dev(ctx):
+    shortcut = await ask_for_information(ctx, "Escribe un atajo para referirte a tu personaje:")
 
     if characterdao.exists_shortcut_guild(shortcut, ctx.guild.id):
         character = characterdao.get_shortcut_guild(shortcut, ctx.guild.id)
@@ -129,29 +122,20 @@ async def char_dev(ctx):
         rich.set_thumbnail(url=thumbnail)
 
         char_preview = await ctx.send(embed=rich)
-        query_wichpartedit = await ctx.send("Elige el número del atributo que quieres cambiar:\n1. Nombre\n2. Avatar\n3. Guardar\n4. Cancelar")
-        response_whichpartedit = await bot.wait_for('message', check=pred)
-        whichpartedit = response_whichpartedit.content
 
-        await delete_messages(query_wichpartedit, response_whichpartedit)
+        whichpartedit = await ask_for_information(ctx, "Elige el número del atributo que quieres cambiar:\n1. Nombre\n2. Avatar\n3. Guardar\n4. Cancelar")
 
         while whichpartedit != '4' and whichpartedit != '3':
             if whichpartedit == '2':
-                query_thumbnail = await ctx.send("Escribe la url del avatar de tu personaje:")
-                response_thumbnail = await bot.wait_for('message', check=pred)
-                thumbnail = response_thumbnail.content
-                await delete_messages(query_thumbnail, response_thumbnail)
+                thumbnail = await ask_for_information(ctx, "Escribe la url del avatar de tu personaje:")
 
                 if not checkers.is_url(thumbnail):
                     error_message = await ctx.send('El valor **{0}** para *thumbnail* no es una URL'.format(thumbnail))
                     await asyncio.sleep(10)
-                    await error_message.delete()
+                    await delete_messages(error_message)
                     return
             elif whichpartedit == '1':
-                query_name = await ctx.send("Escribe el nombre de tu personaje:")
-                response_name = await bot.wait_for('message', check=pred)
-                name = response_name.content
-                await delete_messages(query_name, response_name)
+                name = await ask_for_information(ctx, "Escribe el nombre de tu personaje:")
 
             await delete_messages(char_preview)
             rich = Embed(title="El personaje tendrá el atajo: {0}".format(shortcut), color=0xffffff)
@@ -159,11 +143,7 @@ async def char_dev(ctx):
             rich.set_thumbnail(url=thumbnail)
 
             char_preview = await ctx.send(embed=rich)
-            query_wichpartedit = await ctx.send("Elige el número del atributo que quieres cambiar:\n1. Nombre\n2. Avatar\n3. Guardar\n4. Cancelar")
-            response_whichpartedit = await bot.wait_for('message', check=pred)
-            whichpartedit = response_whichpartedit.content
-
-            await delete_messages(query_wichpartedit, response_whichpartedit)
+            whichpartedit = await ask_for_information(ctx, "Elige el número del atributo que quieres cambiar:\n1. Nombre\n2. Avatar\n3. Guardar\n4. Cancelar")
 
         await delete_messages(char_preview)
 
@@ -179,24 +159,15 @@ async def char_dev(ctx):
         is_master = member_role != None and member_role.role == 'masta'
         if is_master or not characterdao.exists_player_guild(ctx.author.id, ctx.guild.id):
             starting_creation = await ctx.send("{0.author.display_name} comienza la creación de un personaje".format(ctx))
+            
+            name = await ask_for_information(ctx, "Escribe el nombre de tu personaje:")
 
-            query_name = await ctx.send("Escribe el nombre de tu personaje:")
-            response_name = await bot.wait_for('message', check=pred)
-            name = response_name.content
-            await query_name.delete()
-            await response_name.delete()
-
-            query_thumbnail = await ctx.send("Escribe la url del avatar de tu personaje:")
-            response_thumbnail = await bot.wait_for('message', check=pred)
-            thumbnail = response_thumbnail.content
-            await query_thumbnail.delete()
-            await response_thumbnail.delete()
-            await starting_creation.delete()
+            thumbnail = await ask_for_information(ctx, "Escribe la url del avatar de tu personaje:")
 
             if not checkers.is_url(thumbnail):
                 error_message = await ctx.send('El valor **{0}** para *thumbnail* no es una URL'.format(thumbnail))
                 await asyncio.sleep(10)
-                await error_message.delete()
+                await delete_messages(error_message)
                 return
             
             rich = Embed(title="El personaje tendrá el atajo: {0}".format(shortcut), color=0xffffff)
@@ -204,12 +175,7 @@ async def char_dev(ctx):
             rich.set_thumbnail(url=thumbnail)
             
             char_preview = await ctx.send(embed=rich)
-            query_confirmation = await ctx.send("Confirma los datos del personaje (s o n):")
-            response_confirmation = await bot.wait_for('message', check=pred)
-            confirmation = response_confirmation.content
-            await char_preview.delete()
-            await query_confirmation.delete()
-            await response_confirmation.delete()
+            confirmation = await ask_for_information(ctx, "Confirma los datos del personaje (s o n):")
 
             if confirmation == 's':
                 await ctx.send("Creando el personaje...")
@@ -315,5 +281,16 @@ async def userid(ctx, user:discord.Member):
 async def delete_messages(*messages):
     for message in list(messages):
         await message.delete()
+
+async def ask_for_information(ctx, text):
+    def pred(m):
+        return m.author == ctx.author and m.channel == ctx.channel
+
+    query = await ctx.send(text)
+    response = await bot.wait_for('message', check=pred)
+    result = response.content
+    await delete_messages(query, response)
+
+    return result
 
 bot.run(bot_token)

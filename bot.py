@@ -1,7 +1,6 @@
 import discord
 import random
 import utils
-import ryf
 import asyncio
 import configparser
 import os
@@ -12,10 +11,13 @@ from discord import Embed
 from database import characterdao
 from database import channelroledao
 from database import memberroledao
+from dxd import DxD
 
 bot_token = os.environ['BOT_TOKEN']
 
 bot = commands.Bot(command_prefix='d!')
+
+rules = DxD()
 
 @bot.event
 async def on_ready():
@@ -32,7 +34,7 @@ async def roll(ctx, bonus:int=0, difficulty:int=0, dice:str='n'):
     elif dice == 'up' or dice == 'u':
         dice_index = 2
     
-    roll_result = ryf.attr_skill_roll(dice_index)
+    roll_result = rules.attr_skill_roll(dice_index)
 
     all_rolls = roll_result[0]
     total_roll = roll_result[1]
@@ -77,7 +79,7 @@ async def effect(ctx, dice_amount:int, bonus:int=0):
             await ctx.send("https://media.giphy.com/media/9JjnmOwXxOmLC/giphy.gif")
             return
 
-    roll_result = ryf.effect_roll(dice_amount)
+    roll_result = rules.effect_roll(dice_amount)
     
     all_rolls = roll_result[0]
     total_roll = roll_result[1]

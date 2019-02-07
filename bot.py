@@ -74,7 +74,7 @@ async def roll(ctx, bonus:int=0, difficulty:int=0, dice:str='n', e_dice_amount:i
     await ctx.send(embed=rich)
 
     if total >= difficulty and e_dice_amount > 0:
-        effect_call(ctx, e_dice_amount, e_bonus)
+        await effect_call(ctx, e_dice_amount, e_bonus)
 
 @bot.command()
 async def effect(ctx, dice_amount:int, bonus:int=0):
@@ -99,7 +99,7 @@ async def effect(ctx, dice_amount:int, bonus:int=0):
 
     await ctx.send(embed=rich)
 
-def effect_call(ctx, dice_amount:int, bonus:int=0):
+async def effect_call(ctx, dice_amount:int, bonus:int=0):
     if dice_amount >= 100:
         async with ctx.typing():
             await asyncio.sleep(3)

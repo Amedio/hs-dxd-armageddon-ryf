@@ -152,7 +152,7 @@ async def char_dev(ctx):
                     await asyncio.sleep(10)
                     await error_message.delete()
                     return
-            else if whichpartedit == '1':
+            elif whichpartedit == '1':
                 query_name = await ctx.send("Escribe el nombre de tu personaje:")
                 response_name = await bot.wait_for('message', check=pred)
                 name = response_name.content

@@ -8,6 +8,7 @@ import psycopg2
 from validator_collection import checkers
 from discord.ext import commands
 from discord import Embed
+from discord import Client
 from database import characterdao
 from database import channelroledao
 from database import memberroledao
@@ -106,7 +107,20 @@ async def effect_call(ctx, dice_amount:int, bonus:int=0):
     await ctx.send(embed=rich)
 
 @bot.command()
-async def char(ctx, shortcut:str, name:str, thumbnail:str):
+async def char_dev(ctx, shortcut:str="", name:str="", thumbnail:str=""):
+    
+    def pred(m):
+        return m.author == ctx.author and m.channel == ctx.channel
+
+    if shortcut == "":
+        await ctx.send("Dime un atajo para referirme a el:")
+        shortcut = await bot.wait_for('message', check=pred)
+    
+    await ctx.send("El personaje tendrá el atajo: " + shortcut)
+
+
+@bot.command()
+async def char(ctx, shortcut:str="", name:str="", thumbnail:str=""):
     if not checkers.is_url(thumbnail):
         error_message = await ctx.send('El valor **{0}** para *thumbnail* no es una URL'.format(thumbnail))
         await asyncio.sleep(10)

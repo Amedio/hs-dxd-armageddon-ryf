@@ -114,7 +114,8 @@ async def char_dev(ctx, shortcut:str="", name:str="", thumbnail:str=""):
 
     if shortcut == "":
         await ctx.send("Dime un atajo para referirme a el:")
-        shortcut = await bot.wait_for('message', check=pred)
+        response = await bot.wait_for('message', check=pred)
+        shortcut = response.content
     
     await ctx.send("El personaje tendrá el atajo: " + shortcut)
 

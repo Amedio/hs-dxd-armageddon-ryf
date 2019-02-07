@@ -144,7 +144,12 @@ async def char_dev(ctx):
     char_preview = await ctx.send(embed=rich)
     query_confirmation = await ctx.send("Confirma los datos del personaje (s o n):")
     response_confirmation = await bot.wait_for('message', check=pred)
-    if response_confirmation.content == 's':
+    confirmation = response_confirmation.content
+    await char_preview.delete()
+    await query_confirmation.delete()
+    await response_confirmation.delete()
+
+    if confirmation == 's':
         await ctx.send("Creando el personaje...")
     else:
         await ctx.send("Creación del personaje cancelada")

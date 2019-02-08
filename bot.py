@@ -108,6 +108,18 @@ async def effect_call(ctx, dice_amount:int, bonus:int=0):
     await ctx.send(embed=rich)
 
 @bot.command()
+async def lchars(ctx:Context):
+    characters = characterdao.get_all_player(ctx.author.id, ctx.guild.id)
+
+    for character in characters:
+        rich = Embed(title = '', color=0xffffff)
+        rich.add_field(name = 'Nombre', value = character.name)
+        rich.add_field(name = 'Atajo', value = character.shortcut)
+        rich.set_thumbnail(url = character.thumbnail)
+
+        await ctx.send(embed = rich)
+
+@bot.command()
 async def char(ctx:Context):
     shortcut = await utils.ask_for_information(ctx, bot, "Escribe un atajo para referirte a tu personaje:")
 

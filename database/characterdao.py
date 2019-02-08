@@ -128,3 +128,24 @@ def get_player_guild(player, guild_id):
         return player_character
 
     return None
+
+def get_all_player(player, guild_id):
+    conn = psycopg2.connect(database_url, sslmode='require')
+    cur = conn.cursor()
+
+    cur.execute("SELECT * FROM character WHERE player = '{0}' AND guild_id = '{1}'".format(player, guild_id))
+
+    row = cur.fetchone()
+
+    player_characters = []
+
+    while row != None:
+        row = cur.fetchone()
+
+        player_character = Character(row[1], row[2], row[3], row[4])
+        player_characters.append(player_character)
+
+    cur.close()
+    conn.close()
+
+    return player_characters

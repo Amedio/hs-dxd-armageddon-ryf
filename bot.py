@@ -7,12 +7,13 @@ import os
 import psycopg2
 from validator_collection import checkers
 from discord.ext import commands
+from discord.ext.commands import Context
 from discord import Embed
 from discord import Client
 from database import characterdao
 from database import channelroledao
 from database import memberroledao
-from dxd import DxD
+from rules.dxd import DxD
 
 bot_token = os.environ['BOT_TOKEN']
 
@@ -107,8 +108,8 @@ async def effect_call(ctx, dice_amount:int, bonus:int=0):
     await ctx.send(embed=rich)
 
 @bot.command()
-async def char_dev(ctx):
-    shortcut = await ask_for_information(ctx, "Escribe un atajo para referirte a tu personaje:")
+async def char_dev(ctx:Context):
+    shortcut = await utils.ask_for_information(ctx, bot, "Escribe un atajo para referirte a tu personaje:")
 
     if characterdao.exists_shortcut_guild(shortcut, ctx.guild.id):
         character = characterdao.get_shortcut_guild(shortcut, ctx.guild.id)
@@ -123,29 +124,29 @@ async def char_dev(ctx):
 
         char_preview = await ctx.send(embed=rich)
 
-        whichpartedit = await ask_for_information(ctx, "Elige el número del atributo que quieres cambiar:\n1. Nombre\n2. Avatar\n3. Guardar\n4. Cancelar")
+        whichpartedit = await utils.ask_for_information(ctx, bot, "Elige el número del atributo que quieres cambiar:\n1. Nombre\n2. Avatar\n3. Guardar\n4. Cancelar")
 
         while whichpartedit != '4' and whichpartedit != '3':
             if whichpartedit == '2':
-                thumbnail = await ask_for_information(ctx, "Escribe la url del avatar de tu personaje:")
+                thumbnail = await utils.ask_for_information(ctx, bot, "Escribe la url del avatar de tu personaje:")
 
                 if not checkers.is_url(thumbnail):
                     error_message = await ctx.send('El valor **{0}** para *thumbnail* no es una URL'.format(thumbnail))
                     await asyncio.sleep(10)
-                    await delete_messages(error_message)
+                    await utils.delete_messages(error_message)
                     return
             elif whichpartedit == '1':
-                name = await ask_for_information(ctx, "Escribe el nombre de tu personaje:")
+                name = await utils.ask_for_information(ctx, bot,  "Escribe el nombre de tu personaje:")
 
-            await delete_messages(char_preview)
+            await utils.delete_messages(char_preview)
             rich = Embed(title="El personaje tendrá el atajo: {0}".format(shortcut), color=0xffffff)
             rich.set_author(name=name)
             rich.set_thumbnail(url=thumbnail)
 
             char_preview = await ctx.send(embed=rich)
-            whichpartedit = await ask_for_information(ctx, "Elige el número del atributo que quieres cambiar:\n1. Nombre\n2. Avatar\n3. Guardar\n4. Cancelar")
+            whichpartedit = await utils.ask_for_information(ctx, bot, "Elige el número del atributo que quieres cambiar:\n1. Nombre\n2. Avatar\n3. Guardar\n4. Cancelar")
 
-        await delete_messages(char_preview)
+        await utils.delete_messages(char_preview)
 
         if whichpartedit == '4':
             await ctx.send("Creación del personaje cancelada")
@@ -160,14 +161,14 @@ async def char_dev(ctx):
         if is_master or not characterdao.exists_player_guild(ctx.author.id, ctx.guild.id):
             starting_creation = await ctx.send("{0.author.display_name} comienza la creación de un personaje".format(ctx))
             
-            name = await ask_for_information(ctx, "Escribe el nombre de tu personaje:")
+            name = await utils.ask_for_information(ctx, bot, "Escribe el nombre de tu personaje:")
 
-            thumbnail = await ask_for_information(ctx, "Escribe la url del avatar de tu personaje:")
+            thumbnail = await utils.ask_for_information(ctx, bot, "Escribe la url del avatar de tu personaje:")
 
             if not checkers.is_url(thumbnail):
                 error_message = await ctx.send('El valor **{0}** para *thumbnail* no es una URL'.format(thumbnail))
                 await asyncio.sleep(10)
-                await delete_messages(error_message)
+                await utils.delete_messages(error_message)
                 return
             
             rich = Embed(title="El personaje tendrá el atajo: {0}".format(shortcut), color=0xffffff)
@@ -175,7 +176,7 @@ async def char_dev(ctx):
             rich.set_thumbnail(url=thumbnail)
             
             char_preview = await ctx.send(embed=rich)
-            confirmation = await ask_for_information(ctx, "Confirma los datos del personaje (s o n):")
+            confirmation = await utils.ask_for_information(ctx, bot, "Confirma los datos del personaje (s o n):")
 
             if confirmation == 's':
                 await ctx.send("Creando el personaje...")
@@ -277,20 +278,5 @@ async def usrole(ctx, role:str, user:discord.Member):
 @config.command()
 async def userid(ctx, user:discord.Member):
     await ctx.send(user.id)
-
-async def delete_messages(*messages):
-    for message in list(messages):
-        await message.delete()
-
-async def ask_for_information(ctx, text):
-    def pred(m):
-        return m.author == ctx.author and m.channel == ctx.channel
-
-    query = await ctx.send(text)
-    response = await bot.wait_for('message', check=pred)
-    result = response.content
-    await delete_messages(query, response)
-
-    return result
 
 bot.run(bot_token)

@@ -1,4 +1,4 @@
-from ryf import RyF
+from rules.ryf import RyF
 
 class DxD(RyF):
     def attr_skill_roll(self, dice_index):

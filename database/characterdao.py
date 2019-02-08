@@ -140,10 +140,10 @@ def get_all_player(player, guild_id):
     player_characters = []
 
     while row != None:
-        row = cur.fetchone()
-
         player_character = Character(row[1], row[2], row[3], row[4])
         player_characters.append(player_character)
+        
+        row = cur.fetchone()
 
     cur.close()
     conn.close()

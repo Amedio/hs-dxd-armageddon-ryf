@@ -192,28 +192,30 @@ async def char(ctx:Context):
             await ctx.send('No eres el masta y ya tienes un personaje')
 
 @bot.command()
-async def say(ctx, text:str, shortcut:str=''):
+async def say(ctx:Context, character_shortcut:str=''):
     await ctx.message.delete()
 
     channel_role = channelroledao.get(ctx.channel.id)
     if channel_role == None or (channel_role.role != 'on-rol' and channel_role.role != 'combat'):
-        error_message = await ctx.send("Estás en un canal que no pertenece a ON-ROL")
+        error_message = await ctx.send('Estás en un canal que no pertenece a ON-ROL')
         await asyncio.sleep(5)
         await error_message.delete()
         return
 
-    rich=Embed(title=text, color=0xffffff)
-
-    if shortcut != '':
-        player_character = characterdao.get_shortcut_guild(shortcut, ctx.guild.id)
+    if character_shortcut != '':
+        player_character = characterdao.get_shortcut_guild(character_shortcut, ctx.guild.id)
     else:
         player_character = characterdao.get_player_guild(ctx.author.id, ctx.guild.id)
 
     if player_character != None:
-        rich.set_author(name=player_character.name)
-        rich.set_thumbnail(url=player_character.thumbnail)
+        async with ctx.typing():
+            text = await utils.ask_for_information(ctx, bot, '¿Qué vas a decir?')
 
-        await ctx.send(embed=rich)
+            rich = Embed(title = text, color = 0xffffff)
+            rich.set_author(name = player_character.name)
+            rich.set_thumbnail(url = player_character.thumbnail)
+
+            await ctx.send(embed = rich)
     else:
         result_message = await ctx.send('No tienes ningún personaje asignado o no se encuentra el personaje, utiliza **d!char** para crear tu personaje')
         

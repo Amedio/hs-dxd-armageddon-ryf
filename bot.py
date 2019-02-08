@@ -164,11 +164,9 @@ async def char(ctx:Context):
 
         if which_part_edit == '4':
             await ctx.send("Creación del personaje cancelada")
-            return
         elif which_part_edit == '3':
             await ctx.send("Guardando personaje...")
             characterdao.update(shortcut, name, thumbnail, ctx.guild.id)
-            return
     else:
         member_role = memberroledao.get(ctx.author.id, ctx.guild.id)
         is_master = member_role != None and member_role.role == 'masta'

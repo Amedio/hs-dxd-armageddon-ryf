@@ -78,6 +78,23 @@ def get_shortcut_guild(shortcut, guild_id):
 
     return None
 
+def get_shortcut_player_guild(shortcut, player, guild_id):
+    conn = psycopg2.connect(database_url, sslmode='require')
+    cur = conn.cursor()
+
+    cur.execute("SELECT * FROM character WHERE shortcut = '{0}' AND player = '{1}' AND guild_id = '{2}'".format(shortcut, player, guild_id))
+
+    row = cur.fetchone()
+
+    cur.close()
+    conn.close()
+
+    if row != None:
+        player_character = Character(row[1], row[2], row[3], row[4])
+        return player_character
+
+    return None
+
 def get_player(player):
     conn = psycopg2.connect(database_url, sslmode='require')
     cur = conn.cursor()

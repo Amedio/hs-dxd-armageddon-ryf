@@ -203,7 +203,7 @@ async def say(ctx:Context, character_shortcut:str=''):
         return
 
     if character_shortcut != '':
-        player_character = characterdao.get_shortcut_guild(character_shortcut, ctx.guild.id)
+        player_character = characterdao.get_shortcut_player_guild(character_shortcut, ctx.author.id, ctx.guild.id)
     else:
         player_character = characterdao.get_player_guild(ctx.author.id, ctx.guild.id)
 

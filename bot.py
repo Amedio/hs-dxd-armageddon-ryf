@@ -123,6 +123,7 @@ async def lchars(ctx:Context):
 async def char(ctx:Context):
     shortcut = await utils.ask_for_information(ctx, bot, "Escribe un atajo para referirte a tu personaje:")
 
+    return_message = None
     if characterdao.exists_shortcut_guild(shortcut, ctx.guild.id):
         character = characterdao.get_shortcut_guild(shortcut, ctx.guild.id)
 
@@ -163,9 +164,9 @@ async def char(ctx:Context):
         await utils.delete_messages(char_preview)
 
         if which_part_edit == '4':
-            await ctx.send("Creación del personaje cancelada")
+            return_message = await ctx.send("Creación del personaje cancelada")
         elif which_part_edit == '3':
-            await ctx.send("Guardando personaje...")
+            return_message = await ctx.send("Guardando personaje...")
             characterdao.update(shortcut, name, thumbnail, ctx.guild.id)
     else:
         member_role = memberroledao.get(ctx.author.id, ctx.guild.id)
@@ -194,12 +195,15 @@ async def char(ctx:Context):
             confirmation = await utils.ask_for_information(ctx, bot, "Confirma los datos del personaje (s o n):")
 
             if confirmation == 's':
-                await ctx.send("Creando el personaje...")
+                return_message = await ctx.send("Creando el personaje...")
                 characterdao.insert(shortcut, name, thumbnail, ctx.author.id, ctx.guild.id)
             else:
-                await ctx.send("Creación del personaje cancelada")
+                return_message = await ctx.send("Creación del personaje cancelada")
         else:
-            await ctx.send('No eres el masta y ya tienes un personaje')
+            return_message = await ctx.send('No eres el masta y ya tienes un personaje')
+
+    if return_message != None:
+        await utils.delete_messages(return_message)
 
 @bot.command()
 async def say(ctx:Context, character_shortcut:str=''):

@@ -108,7 +108,7 @@ async def effect_call(ctx, dice_amount:int, bonus:int=0):
     await ctx.send(embed=rich)
 
 @bot.command()
-async def char_dev(ctx:Context):
+async def char(ctx:Context):
     shortcut = await utils.ask_for_information(ctx, bot, "Escribe un atajo para referirte a tu personaje:")
 
     if characterdao.exists_shortcut_guild(shortcut, ctx.guild.id):
@@ -124,10 +124,10 @@ async def char_dev(ctx:Context):
 
         char_preview = await ctx.send(embed=rich)
 
-        whichpartedit = await utils.ask_for_information(ctx, bot, "Elige el número del atributo que quieres cambiar:\n1. Nombre\n2. Avatar\n3. Guardar\n4. Cancelar")
+        which_part_edit = await utils.ask_for_information(ctx, bot, "Elige el número del atributo que quieres cambiar:\n1. Nombre\n2. Avatar\n3. Guardar\n4. Cancelar")
 
-        while whichpartedit != '4' and whichpartedit != '3':
-            if whichpartedit == '2':
+        while which_part_edit != '4' and which_part_edit != '3':
+            if which_part_edit == '2':
                 thumbnail = await utils.ask_for_information(ctx, bot, "Escribe la url del avatar de tu personaje:")
 
                 if not checkers.is_url(thumbnail):
@@ -135,7 +135,7 @@ async def char_dev(ctx:Context):
                     await asyncio.sleep(10)
                     await utils.delete_messages(error_message)
                     return
-            elif whichpartedit == '1':
+            elif which_part_edit == '1':
                 name = await utils.ask_for_information(ctx, bot,  "Escribe el nombre de tu personaje:")
 
             await utils.delete_messages(char_preview)
@@ -144,14 +144,14 @@ async def char_dev(ctx:Context):
             rich.set_thumbnail(url=thumbnail)
 
             char_preview = await ctx.send(embed=rich)
-            whichpartedit = await utils.ask_for_information(ctx, bot, "Elige el número del atributo que quieres cambiar:\n1. Nombre\n2. Avatar\n3. Guardar\n4. Cancelar")
+            which_part_edit = await utils.ask_for_information(ctx, bot, "Elige el número del atributo que quieres cambiar:\n1. Nombre\n2. Avatar\n3. Guardar\n4. Cancelar")
 
         await utils.delete_messages(char_preview)
 
-        if whichpartedit == '4':
+        if which_part_edit == '4':
             await ctx.send("Creación del personaje cancelada")
             return
-        elif whichpartedit == '3':
+        elif which_part_edit == '3':
             await ctx.send("Guardando personaje...")
             characterdao.update(shortcut, name, thumbnail, ctx.guild.id)
             return
@@ -183,24 +183,6 @@ async def char_dev(ctx:Context):
                 characterdao.insert(shortcut, name, thumbnail, ctx.author.id, ctx.guild.id)
             else:
                 await ctx.send("Creación del personaje cancelada")
-        else:
-            await ctx.send('No eres el masta y ya tienes un personaje')
-
-@bot.command()
-async def char(ctx, shortcut:str="", name:str="", thumbnail:str=""):
-    if not checkers.is_url(thumbnail):
-        error_message = await ctx.send('El valor **{0}** para *thumbnail* no es una URL'.format(thumbnail))
-        await asyncio.sleep(10)
-        await error_message.delete()
-        return
-
-    if characterdao.exists_shortcut_guild(shortcut, ctx.guild.id):
-        characterdao.update(shortcut, name, thumbnail, ctx.guild.id)
-    else:
-        member_role = memberroledao.get(ctx.author.id, ctx.guild.id)
-        is_master = member_role != None and member_role.role == 'masta'
-        if is_master or not characterdao.exists_player(ctx.author.id):
-            characterdao.insert(shortcut, name, thumbnail, ctx.author.id, ctx.guild.id)
         else:
             await ctx.send('No eres el masta y ya tienes un personaje')
 

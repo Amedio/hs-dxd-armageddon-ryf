@@ -203,7 +203,9 @@ async def char(ctx:Context):
             return_message = await ctx.send('No eres el masta y ya tienes un personaje')
 
     if return_message != None:
-        await utils.delete_messages(return_message)
+        await utils.delete_messages(return_message, ctx.message)
+    else:
+        await utils.delete_messages(ctx.message)
 
 @bot.command()
 async def say(ctx:Context, character_shortcut:str=''):

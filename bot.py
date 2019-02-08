@@ -284,4 +284,8 @@ async def usrole(ctx, role:str, user:discord.Member):
 async def userid(ctx, user:discord.Member):
     await ctx.send(user.id)
 
+@config.command()
+async def chunni_god(ctx:Context):
+    await ctx.send('https://media1.tenor.com/images/270f9074cc8766817760111de4f5b71c/tenor.gif?itemid=5820863')
+
 bot.run(bot_token)

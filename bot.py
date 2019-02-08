@@ -108,7 +108,7 @@ async def effect_call(ctx, dice_amount:int, bonus:int=0):
     await ctx.send(embed=rich)
 
 @bot.command()
-async def char_dev(ctx):
+async def char_dev(ctx:Context):
     shortcut = await utils.ask_for_information(ctx, bot, "Escribe un atajo para referirte a tu personaje:")
 
     if characterdao.exists_shortcut_guild(shortcut, ctx.guild.id):

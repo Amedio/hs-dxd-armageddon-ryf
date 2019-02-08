@@ -118,8 +118,9 @@ async def char(ctx:Context):
         name = character.name
         thumbnail = character.thumbnail
 
-        rich = Embed(title="El personaje tendrá el atajo: {0}".format(shortcut), color=0xffffff)
-        rich.set_author(name=name)
+        rich = Embed(title = 'Vista previa del personaje', color=0xffffff)
+        rich.add_field(name = 'Nombre', value = name)
+        rich.add_field(name = 'Atajo', value = shortcut)
         rich.set_thumbnail(url=thumbnail)
 
         char_preview = await ctx.send(embed=rich)
@@ -139,8 +140,9 @@ async def char(ctx:Context):
                 name = await utils.ask_for_information(ctx, bot,  "Escribe el nombre de tu personaje:")
 
             await utils.delete_messages(char_preview)
-            rich = Embed(title="El personaje tendrá el atajo: {0}".format(shortcut), color=0xffffff)
-            rich.set_author(name=name)
+            rich = Embed(title = 'Vista previa del personaje', color=0xffffff)
+            rich.add_field(name = 'Nombre', value = name)
+            rich.add_field(name = 'Atajo', value = shortcut)
             rich.set_thumbnail(url=thumbnail)
 
             char_preview = await ctx.send(embed=rich)
@@ -170,9 +172,12 @@ async def char(ctx:Context):
                 await asyncio.sleep(10)
                 await utils.delete_messages(error_message)
                 return
+
+            await utils.delete_messages(starting_creation)
             
-            rich = Embed(title="El personaje tendrá el atajo: {0}".format(shortcut), color=0xffffff)
-            rich.set_author(name=name)
+            rich = Embed(title = 'Vista previa del personaje', color=0xffffff)
+            rich.add_field(name = 'Nombre', value = name)
+            rich.add_field(name = 'Atajo', value = shortcut)
             rich.set_thumbnail(url=thumbnail)
             
             char_preview = await ctx.send(embed=rich)

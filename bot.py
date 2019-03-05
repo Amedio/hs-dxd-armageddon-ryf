@@ -258,7 +258,7 @@ async def combat(ctx, enemy:discord.Member):
         challenge_answer = await utils.ask_for_information(ctx, bot, '{0}, ¿quieres aceptar el combate con {1}? (S/N)'.format(enemy.mention, ctx.author.mention), 25, enemy)
 
         while challenge_answer != 'S' or challenge_answer != 'N' or challenge_answer != None:
-            challenge_answer = await utils.ask_for_information(ctx, bot, 'No entiendo **{0}**, {1}, ¿quieres aceptar el combate con {2}? (S/N)'.format(challenge_anser, enemy.mention, ctx.author.mention), 25, enemy)
+            challenge_answer = await utils.ask_for_information(ctx, bot, 'No entiendo **{0}**, {1}, ¿quieres aceptar el combate con {2}? (S/N)'.format(challenge_answer, enemy.mention, ctx.author.mention), 25, enemy)
 
         if challenge_answer == 'S':
             msg = await ctx.send('**{0}** desafía a **{1}** a un combate'.format(player_character_challenger.name, player_character_challenged.name))

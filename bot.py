@@ -255,8 +255,19 @@ async def combat(ctx, enemy:discord.Member):
     player_character_challenged = characterdao.get_player_guild(enemy.id, ctx.guild.id)
 
     if player_character_challenger != None and player_character_challenged != None:
-        msg = await ctx.send('**{0}** desafía a **{1}** a un combate'.format(player_character_challenger.name, player_character_challenged.name))
-        await msg.pin()
+        try:
+            challenge_answer = await utils.ask_for_information(ctx, bot, '{0}, ¿quieres aceptar el combate con {1}? (S/N)'.format(enemy.mention, ctx.author.mention), 10, enemy)
+
+            while challenge_answer != 'S' or challenge_answer != 'N':
+                challenge_answer = await utils.ask_for_information(ctx, bot, 'No te he entendido, {0}, ¿quieres aceptar el combate con {1}? (S/N)'.format(enemy.mention, ctx.author.mention), 10, enemy)
+
+            if challenge_answer == 'S':
+                msg = await ctx.send('**{0}** desafía a **{1}** a un combate'.format(player_character_challenger.name, player_character_challenged.name))
+                await msg.pin()
+            elif challenge_answer == 'N':
+                await ctx.send('**{0}** ha rechazado la petición de **{1}** a un combate'.format(player_character_challenged.name, player_character_challenger.name))
+        except asyncio.TimeoutError:
+            await ctx.send('Se ha acabado el tiempo de espera volved a realizar el reto')
     elif player_character_challenger == None:
         await ctx.send('{0}, no tienes personaje creado, por favor crealo con d!char'.format(ctx.author.mention))
     elif player_character_challenged == None:

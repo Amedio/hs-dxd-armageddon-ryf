@@ -12,12 +12,14 @@ async def delete_messages(*messages):
     for message in list(messages):
         await message.delete()
 
-async def ask_for_information(ctx:Context, bot, text):
+async def ask_for_information(ctx:Context, bot, text, timeout=None, user=None):
     def pred(m):
+        if user != None: 
+            return m.author == user and m.channel == ctx.channel
         return m.author == ctx.author and m.channel == ctx.channel
 
     query = await ctx.send(text)
-    response = await bot.wait_for('message', check=pred)
+    response = await bot.wait_for('message', check=pred, timeout=timeout)
     result = response.content
     await delete_messages(query, response)
 

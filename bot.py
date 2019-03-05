@@ -265,15 +265,19 @@ async def combat(ctx, enemy:discord.Member):
             await msg.pin()
         elif challenge_answer == 'N':
             msg = await ctx.send('**{0}** ha rechazado la petición de **{1}** a un combate'.format(player_character_challenged.name, player_character_challenger.name))
+            await asyncio.sleep(5)
             await utils.delete_messages(msg)
         elif challenge_answer == '':
             msg = await ctx.send('Se ha acabado el tiempo de espera volved a realizar el reto')
+            await asyncio.sleep(5)
             await utils.delete_messages(msg)
     elif player_character_challenger == None:
         msg = await ctx.send('{0}, no tienes personaje creado, por favor crealo con d!char'.format(ctx.author.mention))
+        await asyncio.sleep(5)
         await utils.delete_messages(msg)
     elif player_character_challenged == None:
         msg = await ctx.send('{0}, no tienes personaje creado, por favor crealo con d!char'.format(enemy.mention))
+        await asyncio.sleep(5)
         await utils.delete_messages(msg)
 
 @bot.group()

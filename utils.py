@@ -21,10 +21,10 @@ async def ask_for_information(ctx:Context, bot, text, timeout=None, user=None):
     query = await ctx.send(text)
     try:
         response = await bot.wait_for('message', check=pred, timeout=timeout)
+        result = response.content
+        await delete_messages(query, response)
     except asyncio.TimeoutError:
         result = ''
-    else:
-        result = response.content
-    await delete_messages(query, response)
+        await delete_messages(query)
 
     return result

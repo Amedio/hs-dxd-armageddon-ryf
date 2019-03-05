@@ -255,23 +255,26 @@ async def combat(ctx, enemy:discord.Member):
     player_character_challenged = characterdao.get_player_guild(enemy.id, ctx.guild.id)
 
     if player_character_challenger != None and player_character_challenged != None:
-        try:
-            challenge_answer = await utils.ask_for_information(ctx, bot, '{0}, ¿quieres aceptar el combate con {1}? (S/N)'.format(enemy.mention, ctx.author.mention), 10, enemy)
+        challenge_answer = await utils.ask_for_information(ctx, bot, '{0}, ¿quieres aceptar el combate con {1}? (S/N)'.format(enemy.mention, ctx.author.mention), 25, enemy)
 
-            while challenge_answer != 'S' or challenge_answer != 'N':
-                challenge_answer = await utils.ask_for_information(ctx, bot, 'No te he entendido, {0}, ¿quieres aceptar el combate con {1}? (S/N)'.format(enemy.mention, ctx.author.mention), 10, enemy)
+        while challenge_answer != 'S' or challenge_answer != 'N' or challenge_answer != '':
+            challenge_answer = await utils.ask_for_information(ctx, bot, 'No te he entendido, {0}, ¿quieres aceptar el combate con {1}? (S/N)'.format(enemy.mention, ctx.author.mention), 25, enemy)
 
-            if challenge_answer == 'S':
-                msg = await ctx.send('**{0}** desafía a **{1}** a un combate'.format(player_character_challenger.name, player_character_challenged.name))
-                await msg.pin()
-            elif challenge_answer == 'N':
-                await ctx.send('**{0}** ha rechazado la petición de **{1}** a un combate'.format(player_character_challenged.name, player_character_challenger.name))
-        except asyncio.TimeoutError:
-            await ctx.send('Se ha acabado el tiempo de espera volved a realizar el reto')
+        if challenge_answer == 'S':
+            msg = await ctx.send('**{0}** desafía a **{1}** a un combate'.format(player_character_challenger.name, player_character_challenged.name))
+            await msg.pin()
+        elif challenge_answer == 'N':
+            msg = await ctx.send('**{0}** ha rechazado la petición de **{1}** a un combate'.format(player_character_challenged.name, player_character_challenger.name))
+            utils.delete_messages(msg)
+        elif challenge_answer == '':
+            msg = await ctx.send('Se ha acabado el tiempo de espera volved a realizar el reto')
+            utils.delete_messages(msg)
     elif player_character_challenger == None:
-        await ctx.send('{0}, no tienes personaje creado, por favor crealo con d!char'.format(ctx.author.mention))
+        msg = await ctx.send('{0}, no tienes personaje creado, por favor crealo con d!char'.format(ctx.author.mention))
+        utils.delete_messages(msg)
     elif player_character_challenged == None:
-        await ctx.send('{0}, no tienes personaje creado, por favor crealo con d!char'.format(enemy.mention))
+        msg = await ctx.send('{0}, no tienes personaje creado, por favor crealo con d!char'.format(enemy.mention))
+        utils.delete_messages(msg)
 
 @bot.group()
 async def config(ctx):

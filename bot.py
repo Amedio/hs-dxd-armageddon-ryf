@@ -251,8 +251,16 @@ async def combat(ctx, enemy:discord.Member):
         await error_message.delete()
         return
 
-    msg = await ctx.send('{0} desafía a {1} a un combate'.format(ctx.author.mention, enemy.mention))
-    await msg.pin()
+    player_character_challenger = characterdao.get_player_guild(ctx.author.id, ctx.guild.id)
+    player_character_challenged = characterdao.get_player_guild(enemy.id, ctx.guild.id)
+
+    if player_character_challenger != None and player_character_challenged != None:
+        msg = await ctx.send('**{0}** desafía a **{1}** a un combate'.format(player_character_challenger.name, player_character_challenged.name))
+        await msg.pin()
+    elif player_character_challenger == None:
+        await ctx.send('{0}, no tienes personaje creado, por favor crealo con d!char'.format(ctx.author.mention))
+    elif player_character_challenged == None:
+        await ctx.send('{0}, no tienes personaje creado, por favor crealo con d!char'.format(enemy.mention))
 
 @bot.group()
 async def config(ctx):

@@ -257,7 +257,7 @@ async def combat(ctx, enemy:discord.Member):
     if player_character_challenger != None and player_character_challenged != None:
         challenge_answer = await utils.ask_for_information(ctx, bot, '{0}, ¿quieres aceptar el combate con {1}? (S/N)'.format(enemy.mention, ctx.author.mention), 25, enemy)
 
-        while challenge_answer != 'S' or challenge_answer != 'N' or challenge_answer != '**':
+        while challenge_answer != 'S' and challenge_answer != 'N' and challenge_answer != '':
             challenge_answer = await utils.ask_for_information(ctx, bot, 'No entiendo **{0}**, {1}, ¿quieres aceptar el combate con {2}? (S/N)'.format(challenge_answer, enemy.mention, ctx.author.mention), 25, enemy)
 
         if challenge_answer == 'S':

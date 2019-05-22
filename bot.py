@@ -21,6 +21,17 @@ bot = commands.Bot(command_prefix='d!')
 
 rules = DxD()
 
+def is_role_channel():
+    async def predicate(ctx):
+        channel_role = channelroledao.get(ctx.channel.id)
+        if channel_role == None or (channel_role.role != 'on-rol' and channel_role.role != 'combat'):
+            error_message = await ctx.send('Estás en un canal que no pertenece a ON-ROL')
+            await asyncio.sleep(5)
+            await error_message.delete()
+            return False
+        return True
+    return commands.check(predicate)
+
 @bot.event
 async def on_ready():
     print('Logged in as')
@@ -208,16 +219,19 @@ async def char(ctx:Context):
         await utils.delete_messages(ctx.message)
 
 @bot.command()
+@is_role_channel()
 async def say(ctx:Context, character_shortcut:str=''):
     await ctx.message.delete()
-
+    
+    '''
     channel_role = channelroledao.get(ctx.channel.id)
     if channel_role == None or (channel_role.role != 'on-rol' and channel_role.role != 'combat'):
         error_message = await ctx.send('Estás en un canal que no pertenece a ON-ROL')
         await asyncio.sleep(5)
         await error_message.delete()
         return
-
+    '''
+    
     if character_shortcut != '':
         player_character = characterdao.get_shortcut_player_guild(character_shortcut, ctx.author.id, ctx.guild.id)
     else:
@@ -237,6 +251,10 @@ async def say(ctx:Context, character_shortcut:str=''):
         
         await asyncio.sleep(5)
         await result_message.delete()
+
+@bot.command()
+async def emote(ctx):
+    pass
 
 @bot.command()
 async def combat(ctx, enemy:discord.Member):

@@ -259,7 +259,7 @@ async def say(ctx:Context, character_shortcut:str=''):
 
 @bot.command()
 @is_on_rol_channel()
-async def emote(ctx, character_shortcut: typing.Optional[str]='', *, args):
+async def emote(ctx, character_shortcut:str='', *, args=''):
     await ctx.send('{0} PROBANDO {1}'.format(character_shortcut, args))
 
 @bot.command()

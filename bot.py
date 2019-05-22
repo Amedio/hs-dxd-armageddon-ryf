@@ -21,11 +21,24 @@ bot = commands.Bot(command_prefix='d!')
 
 rules = DxD()
 
-def is_role_channel():
+def is_on_rol_channel():
     async def predicate(ctx):
         channel_role = channelroledao.get(ctx.channel.id)
         if channel_role == None or (channel_role.role != 'on-rol' and channel_role.role != 'combat'):
             error_message = await ctx.send('Estás en un canal que no pertenece a ON-ROL')
+            await asyncio.sleep(5)
+            await error_message.delete()
+            return False
+        return True
+    return commands.check(predicate)
+
+def is_combat_channel():
+    async def predicate(ctx):
+        channel_role = channelroledao.get(ctx.channel.id)
+        if channel_role == None or channel_role.role != 'combat':
+            combat_role = channelroledao.combat()
+            combat_channel = bot.get_channel(int(combat_role.channel_id))
+            error_message = await ctx.send("Si quieres combatir ve a {0}".format(combat_channel.mention))
             await asyncio.sleep(5)
             await error_message.delete()
             return False
@@ -219,18 +232,9 @@ async def char(ctx:Context):
         await utils.delete_messages(ctx.message)
 
 @bot.command()
-@is_role_channel()
+@is_on_rol_channel()
 async def say(ctx:Context, character_shortcut:str=''):
     await ctx.message.delete()
-    
-    '''
-    channel_role = channelroledao.get(ctx.channel.id)
-    if channel_role == None or (channel_role.role != 'on-rol' and channel_role.role != 'combat'):
-        error_message = await ctx.send('Estás en un canal que no pertenece a ON-ROL')
-        await asyncio.sleep(5)
-        await error_message.delete()
-        return
-    '''
     
     if character_shortcut != '':
         player_character = characterdao.get_shortcut_player_guild(character_shortcut, ctx.author.id, ctx.guild.id)
@@ -253,10 +257,12 @@ async def say(ctx:Context, character_shortcut:str=''):
         await result_message.delete()
 
 @bot.command()
+@is_on_rol_channel()
 async def emote(ctx):
     pass
 
 @bot.command()
+@is_combat_channel()
 async def combat(ctx, enemy:discord.Member):
     await ctx.message.delete()
 

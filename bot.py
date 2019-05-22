@@ -266,15 +266,6 @@ async def emote(ctx):
 async def combat(ctx, enemy:discord.Member):
     await ctx.message.delete()
 
-    channel_role = channelroledao.get(ctx.channel.id)
-    if channel_role == None or channel_role.role != 'combat':
-        combat_role = channelroledao.combat()
-        combat_channel = bot.get_channel(int(combat_role.channel_id))
-        error_message = await ctx.send("Si quieres combatir ve a {0}".format(combat_channel.mention))
-        await asyncio.sleep(5)
-        await error_message.delete()
-        return
-
     player_character_challenger = characterdao.get_player_guild(ctx.author.id, ctx.guild.id)
     player_character_challenged = characterdao.get_player_guild(enemy.id, ctx.guild.id)
 

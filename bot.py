@@ -5,6 +5,7 @@ import asyncio
 import configparser
 import os
 import psycopg2
+import typing
 from validator_collection import checkers
 from discord.ext import commands
 from discord.ext.commands import Context
@@ -258,8 +259,8 @@ async def say(ctx:Context, character_shortcut:str=''):
 
 @bot.command()
 @is_on_rol_channel()
-async def emote(ctx, character_shortcut:str='', *, args):
-    pass
+async def emote(ctx, character_shortcut: typing.Optional[str]='', *, args):
+    await ctx.send('{0} PROBANDO {1}'.format(character_shortcut, args))
 
 @bot.command()
 @is_combat_channel()

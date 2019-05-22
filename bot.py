@@ -258,7 +258,7 @@ async def say(ctx:Context, character_shortcut:str=''):
 
 @bot.command()
 @is_on_rol_channel()
-async def emote(ctx):
+async def emote(ctx, character_shortcut:str='', *, args):
     pass
 
 @bot.command()

@@ -270,6 +270,11 @@ async def emote(ctx, character_shortcut:str, *, args=''):
     
     if player_character != None:
         await ctx.send('*{0} {1}*'.format(player_character.name, args))
+    else:
+        result_message = await ctx.send('No tienes ningún personaje asignado o no se encuentra el personaje, utiliza **d!char** para crear tu personaje')
+        
+        await asyncio.sleep(5)
+        await result_message.delete()
 
 @bot.command()
 @is_combat_channel()

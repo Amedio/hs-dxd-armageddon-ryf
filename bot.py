@@ -259,8 +259,17 @@ async def say(ctx:Context, character_shortcut:str=''):
 
 @bot.command(name='e')
 @is_on_rol_channel()
-async def emote(ctx, character_shortcut:str='', *, args=''):
-    await ctx.send('{0} PROBANDO {1}'.format(character_shortcut, args))
+async def emote(ctx, character_shortcut:str, *, args=''):
+    await ctx.message.delete()
+
+    player_character = characterdao.get_shortcut_player_guild(character_shortcut, ctx.author.id, ctx.guild.id)
+
+    if player_character == None:
+        player_character = characterdao.get_player_guild(ctx.author.id, ctx.guild.id)
+        args = character_shortcut + ' ' + args
+    
+    if player_character != None:
+        await ctx.send('*{0} {1}*'.format(player_character.name, args))
 
 @bot.command()
 @is_combat_channel()

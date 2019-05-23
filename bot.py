@@ -257,7 +257,7 @@ async def say(ctx:Context, character_shortcut:str=''):
         await asyncio.sleep(5)
         await result_message.delete()
 
-@bot.command()
+@bot.command(name='e')
 @is_on_rol_channel()
 async def emote(ctx, character_shortcut:str='', *, args=''):
     await ctx.send('{0} PROBANDO {1}'.format(character_shortcut, args))

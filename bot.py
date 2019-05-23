@@ -258,7 +258,6 @@ async def say(ctx:Context, character_shortcut:str=''):
         await result_message.delete()
 
 @bot.command(name='e')
-@is_on_rol_channel()
 async def emote(ctx, character_shortcut:str, *, args=''):
     await ctx.message.delete()
 

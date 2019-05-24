@@ -257,7 +257,7 @@ async def say(ctx:Context, character_shortcut:str=''):
         await asyncio.sleep(5)
         await result_message.delete()
 
-@bot.command(name='e', aliases=['emote'])
+@bot.command(name='e')
 async def emote(ctx, character_shortcut:str, *, args=''):
     await ctx.message.delete()
 
